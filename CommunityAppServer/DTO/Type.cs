@@ -28,5 +28,6 @@ namespace CommunityAppServer.DTO
             this.Type1 = type.Type1;
         }
         //test
+        //test
     }
 }
