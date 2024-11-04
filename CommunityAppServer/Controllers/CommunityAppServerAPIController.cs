@@ -24,35 +24,60 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         return Ok("Server Responded Successfully");
     }
-    //[HttpPost("login")]
-    //public IActionResult Login([FromBody] DTO.LoginInfo loginDto)
-    //{
-    //    try
-    //    {
-    //        HttpContext.Session.Clear(); //Logout any previous login attempt
+    [HttpPost("login")]
+    public IActionResult Login([FromBody] DTO.LoginInfo loginDto)
+    {
+        try
+        {
+            HttpContext.Session.Clear(); //Logout any previous login attempt
 
-    //        //Get model user class from DB with matching email. 
-    //        Models.Account? modelsUser = context.GetUser(loginDto.Email);
+            //Get model user class from DB with matching email. 
+            Models.Account? modelsAccount = context.GetAccount(loginDto.Email);
 
-    //        //Check if user exist for this email and if password match, if not return Access Denied (Error 403) 
-    //        if (modelsUser == null || modelsUser.UserPassword != loginDto.Password)
-    //        {
-    //            return Unauthorized();
-    //        }
+            //Check if user exist for this email and if password match, if not return Access Denied (Error 403) 
+            if (modelsAccount == null || modelsAccount.Password != loginDto.Password)
+            {
+                return Unauthorized();
+            }
 
-    //        //Login suceed! now mark login in session memory!
-    //        HttpContext.Session.SetString("loggedInUser", modelsUser.UserEmail);
+            //Login suceed! now mark login in session memory!
+            HttpContext.Session.SetString("loggedInAccount", loginDto.Email);
 
-    //        DTO.AppUser dtoUser = new DTO.AppUser(modelsUser);
-    //        dtoUser.ProfileImagePath = GetProfileImageVirtualPath(dtoUser.Id);
-    //        return Ok(dtoUser);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return BadRequest(ex.Message);
-    //    }
+            DTO.Account dtoAccount = new DTO.Account(modelsAccount);
+            //dtoUser.ProfileImagePath = GetProfileImageVirtualPath(dtoUser.Id);
+            return Ok(dtoAccount);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
 
-    //}
+    }
+
+    [HttpPost("register")]
+    public IActionResult Register([FromBody] DTO.Account accountDto)
+    {
+        try
+        {
+            HttpContext.Session.Clear(); //Logout any previous login attempt
+
+            //Create model user class
+            Models.Account modelsAccount = accountDto.GetAccount();
+
+            context.Accounts.Add(modelsAccount);
+            context.SaveChanges();
+
+            //User was added!
+            DTO.Account dtoAccount = new DTO.Account(modelsAccount);
+            //dtoAccount.ProfileImagePath = GetProfileImageVirtualPath(dtoUser.Id);
+            return Ok(dtoAccount);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+    }
 
 
 }
