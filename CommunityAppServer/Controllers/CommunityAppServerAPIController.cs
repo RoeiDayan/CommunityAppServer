@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CommunityAppServer.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommunityAppServer.Controllers;
 
@@ -79,5 +80,40 @@ public class CommunityAppServerAPIController : ControllerBase
 
     }
 
+    [HttpGet("GetUserCommunities")]
+    public IActionResult GetAccountMembers(int id)
+    {
+        try{
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
 
-}
+                //Get model user class from DB with matching email. 
+                Models.Account? account = context.GetAccount(userEmail);
+                //Clear the tracking of all objects to avoid double tracking
+                context.ChangeTracker.Clear();
+
+                //Check if the user that is logged in is the same user of the task
+                //this situation is ok only if the user is a manager
+                if (account == null || (account.Id != id))
+                {
+                    return Unauthorized("user id not matching id");
+                }
+
+                List<Member>? mems = context.GetAccountMembers(id);
+                //Task was added!
+                return Ok(mems);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    } 
+
+
+
+
