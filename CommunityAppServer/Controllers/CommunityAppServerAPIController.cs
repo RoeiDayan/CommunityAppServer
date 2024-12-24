@@ -104,7 +104,6 @@ public class CommunityAppServerAPIController : ControllerBase
                 }
 
                 List<Member>? mems = context.GetAccountMembers(id);
-                //Task was added!
                 return Ok(mems);
             }
             catch (Exception ex)
