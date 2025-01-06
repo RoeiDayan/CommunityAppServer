@@ -80,38 +80,50 @@ public class CommunityAppServerAPIController : ControllerBase
 
     }
 
+
+
     [HttpGet("GetUserCommunities")]
-    public IActionResult GetAccountMembers(int id)
+    public IActionResult GetUserCommunities(int id)
     {
-        try{
-                //Check if who is logged in
-                string? userEmail = HttpContext.Session.GetString("loggedInUser");
-                if (string.IsNullOrEmpty(userEmail))
-                {
-                    return Unauthorized("User is not logged in");
-                }
-
-                //Get model user class from DB with matching email. 
-                Models.Account? account = context.GetAccount(userEmail);
-                //Clear the tracking of all objects to avoid double tracking
-                context.ChangeTracker.Clear();
-
-                //Check if the user that is logged in is the same user of the task
-                //this situation is ok only if the user is a manager
-                if (account == null || (account.Id != id))
-                {
-                    return Unauthorized("user id not matching id");
-                }
-
-                List<Member>? mems = context.GetAccountMembers(id);
-                return Ok(mems);
-            }
-            catch (Exception ex)
+        try
+        {
+            // Check if the user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInUser");
+            if (string.IsNullOrEmpty(userEmail))
             {
-                return BadRequest(ex.Message);
+                return Unauthorized("User is not logged in");
             }
+
+            // Get the account of the logged-in user
+            Models.Account? account = context.GetAccount(userEmail);
+            context.ChangeTracker.Clear();
+
+            // Ensure the logged-in user matches the ID being queried
+            if (account == null || (account.Id != id))
+            {
+                return Unauthorized("User ID does not match");
+            }
+
+            // Fetch all member-community pairs for the user
+            List<MemberCommunityDTO> memberCommunities = context.Members
+                .Where(m => m.UserId == id)
+                .Select(m => new MemberCommunityDTO
+                {
+                    Member = m,
+                    Community = context.Communities.FirstOrDefault(c => c.ComId == m.ComId)
+                })
+                .ToList();
+
+            return Ok(memberCommunities);
         }
-    } 
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+}
+
 
 
 
