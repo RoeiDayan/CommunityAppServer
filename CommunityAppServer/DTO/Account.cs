@@ -21,7 +21,10 @@ namespace CommunityAppServer.DTO
         [Column(TypeName = "datetime")]
         public DateTime? CreatedAt { get; set; }
 
-        
+        public Account() 
+        {
+            
+        }
 
         public Models.Account GetAccount()
         {

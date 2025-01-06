@@ -87,24 +87,20 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
-            // Check if the user is logged in
-            string? userEmail = HttpContext.Session.GetString("loggedInUser");
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
             if (string.IsNullOrEmpty(userEmail))
             {
                 return Unauthorized("User is not logged in");
             }
 
-            // Get the account of the logged-in user
             Models.Account? account = context.GetAccount(userEmail);
             context.ChangeTracker.Clear();
 
-            // Ensure the logged-in user matches the ID being queried
             if (account == null || (account.Id != id))
             {
                 return Unauthorized("User ID does not match");
             }
 
-            // Fetch all member-community pairs for the user
             List<MemberCommunityDTO> memberCommunities = context.Members
                 .Where(m => m.UserId == id)
                 .Select(m => new MemberCommunityDTO
