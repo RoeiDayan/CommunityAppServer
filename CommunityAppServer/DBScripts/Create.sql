@@ -34,7 +34,7 @@ CREATE TABLE Community (
 CREATE TABLE Members (
   ComId INT, 
   UserId INT,
-  Role NVARCHAR(20),
+  [Role] NVARCHAR(20),
   Balance INT,
   UnitNum INT,
   IsLiable BIT, 
@@ -46,14 +46,11 @@ CREATE TABLE Members (
   FOREIGN KEY (ComId) REFERENCES Community(ComId)
 );
 
-CREATE TABLE Role (
-  RoleNum INT PRIMARY KEY,
-  RoleName NVARCHAR(10)
-);
+
 
 CREATE TABLE Types (
   TypeNum INT PRIMARY KEY,
-  Type NVARCHAR(10)
+  [Type] NVARCHAR(10)
 );
 
 CREATE TABLE Priority (
@@ -162,6 +159,17 @@ CREATE TABLE RoomRequests (
 INSERT INTO Account (Email, Name, Password) VALUES ('admin@gmail.com', 'admin', 'admin1');
 GO
 
+INSERT INTO [Community] (ComName, Body, ComCode, GatePhoneNum) VALUES ('Kehila', 'Welcome', '123', '0528185522')
+GO
+
+INSERT INTO [Members] 
+    (UserId, ComId, [Role], Balance, UnitNum, IsLiable, IsResident, IsManager, IsProvider) 
+VALUES 
+    (1, 1, 'Manager', 100, 1, 1, 1, 1, 1);
+GO
+
+
+
 CREATE LOGIN [AdminLogin] WITH PASSWORD = 'ComPass';
 Go
 
@@ -174,3 +182,7 @@ Go
 /*
 scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=CommunityDB;User ID=AdminLogin;Password=ComPass;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context CommunityDBContext -DataAnnotations –force
 */
+
+select * from Account
+select * from Members
+select * from Community

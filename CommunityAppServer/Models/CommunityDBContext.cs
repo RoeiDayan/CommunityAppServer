@@ -33,8 +33,6 @@ public partial class CommunityDBContext : DbContext
 
     public virtual DbSet<ReportFile> ReportFiles { get; set; }
 
-    public virtual DbSet<Role> Roles { get; set; }
-
     public virtual DbSet<RoomRequest> RoomRequests { get; set; }
 
     public virtual DbSet<Status> Statuses { get; set; }
@@ -51,21 +49,21 @@ public partial class CommunityDBContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC27DAB0C5F4");
+            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC277B111742");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
         });
 
         modelBuilder.Entity<Community>(entity =>
         {
-            entity.HasKey(e => e.ComId).HasName("PK__Communit__E15F4112CA3C14CC");
+            entity.HasKey(e => e.ComId).HasName("PK__Communit__E15F4112162268FF");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
         });
 
         modelBuilder.Entity<Member>(entity =>
         {
-            entity.HasKey(e => new { e.ComId, e.UserId }).HasName("PK__Members__3027CDD6242ABB55");
+            entity.HasKey(e => new { e.ComId, e.UserId }).HasName("PK__Members__3027CDD6EF891D65");
 
             entity.HasOne(d => d.Com).WithMany(p => p.Members)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -78,11 +76,11 @@ public partial class CommunityDBContext : DbContext
 
         modelBuilder.Entity<Notice>(entity =>
         {
-            entity.HasKey(e => e.NoticeId).HasName("PK__Notices__CE83CBE5AB7DB9BA");
+            entity.HasKey(e => e.NoticeId).HasName("PK__Notices__CE83CBE5BB83BE43");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Notices).HasConstraintName("FK__Notices__UserId__4222D4EF");
+            entity.HasOne(d => d.User).WithMany(p => p.Notices).HasConstraintName("FK__Notices__UserId__403A8C7D");
 
             entity.HasMany(d => d.Coms).WithMany(p => p.Notices)
                 .UsingEntity<Dictionary<string, object>>(
@@ -90,110 +88,103 @@ public partial class CommunityDBContext : DbContext
                     r => r.HasOne<Community>().WithMany()
                         .HasForeignKey("ComId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Community__ComId__45F365D3"),
+                        .HasConstraintName("FK__Community__ComId__440B1D61"),
                     l => l.HasOne<Notice>().WithMany()
                         .HasForeignKey("NoticeId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Community__Notic__44FF419A"),
+                        .HasConstraintName("FK__Community__Notic__4316F928"),
                     j =>
                     {
-                        j.HasKey("NoticeId", "ComId").HasName("PK__Communit__F0963FF42D6D5E7B");
+                        j.HasKey("NoticeId", "ComId").HasName("PK__Communit__F0963FF4E79D0F0D");
                         j.ToTable("CommunityNotices");
                     });
         });
 
         modelBuilder.Entity<NoticeFile>(entity =>
         {
-            entity.HasKey(e => new { e.NoticeId, e.FileName }).HasName("PK__NoticeFi__0B0A2D0B249DA39C");
+            entity.HasKey(e => new { e.NoticeId, e.FileName }).HasName("PK__NoticeFi__0B0A2D0B4CA76492");
 
             entity.HasOne(d => d.Notice).WithMany(p => p.NoticeFiles)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__NoticeFil__Notic__48CFD27E");
+                .HasConstraintName("FK__NoticeFil__Notic__46E78A0C");
         });
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A381687B238");
+            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A38644E9C53");
 
-            entity.HasOne(d => d.Com).WithMany(p => p.Payments).HasConstraintName("FK__Payments__ComId__4BAC3F29");
+            entity.HasOne(d => d.Com).WithMany(p => p.Payments).HasConstraintName("FK__Payments__ComId__49C3F6B7");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Payments).HasConstraintName("FK__Payments__UserId__4CA06362");
+            entity.HasOne(d => d.User).WithMany(p => p.Payments).HasConstraintName("FK__Payments__UserId__4AB81AF0");
         });
 
         modelBuilder.Entity<Priority>(entity =>
         {
-            entity.HasKey(e => e.PriorityNum).HasName("PK__Priority__B8C9D75AE205E3E6");
+            entity.HasKey(e => e.PriorityNum).HasName("PK__Priority__B8C9D75A5F15A7CF");
 
             entity.Property(e => e.PriorityNum).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<Report>(entity =>
         {
-            entity.HasKey(e => e.ReportId).HasName("PK__Report__D5BD4805CF050131");
+            entity.HasKey(e => e.ReportId).HasName("PK__Report__D5BD4805A59DB2E1");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
 
-            entity.HasOne(d => d.Com).WithMany(p => p.Reports).HasConstraintName("FK__Report__ComId__38996AB5");
+            entity.HasOne(d => d.Com).WithMany(p => p.Reports).HasConstraintName("FK__Report__ComId__36B12243");
 
-            entity.HasOne(d => d.PriorityNavigation).WithMany(p => p.Reports).HasConstraintName("FK__Report__Priority__398D8EEE");
+            entity.HasOne(d => d.PriorityNavigation).WithMany(p => p.Reports).HasConstraintName("FK__Report__Priority__37A5467C");
 
-            entity.HasOne(d => d.StatusNavigation).WithMany(p => p.Reports).HasConstraintName("FK__Report__Status__3B75D760");
+            entity.HasOne(d => d.StatusNavigation).WithMany(p => p.Reports).HasConstraintName("FK__Report__Status__398D8EEE");
 
-            entity.HasOne(d => d.TypeNavigation).WithMany(p => p.Reports).HasConstraintName("FK__Report__Type__3A81B327");
+            entity.HasOne(d => d.TypeNavigation).WithMany(p => p.Reports).HasConstraintName("FK__Report__Type__38996AB5");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Reports).HasConstraintName("FK__Report__UserId__37A5467C");
+            entity.HasOne(d => d.User).WithMany(p => p.Reports).HasConstraintName("FK__Report__UserId__35BCFE0A");
         });
 
         modelBuilder.Entity<ReportFile>(entity =>
         {
-            entity.HasKey(e => new { e.ReportId, e.FileName }).HasName("PK__ReportFi__1034AEEBB0EC7567");
+            entity.HasKey(e => new { e.ReportId, e.FileName }).HasName("PK__ReportFi__1034AEEBEC7935AD");
 
             entity.HasOne(d => d.Report).WithMany(p => p.ReportFiles)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ReportFil__Repor__3E52440B");
-        });
-
-        modelBuilder.Entity<Role>(entity =>
-        {
-            entity.HasKey(e => e.RoleNum).HasName("PK__Role__D3B7158FE9E6D6B9");
-
-            entity.Property(e => e.RoleNum).ValueGeneratedNever();
+                .HasConstraintName("FK__ReportFil__Repor__3C69FB99");
         });
 
         modelBuilder.Entity<RoomRequest>(entity =>
         {
-            entity.HasKey(e => e.RequestId).HasName("PK__RoomRequ__33A8517AA18D6530");
+            entity.HasKey(e => e.RequestId).HasName("PK__RoomRequ__33A8517AEC47125A");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
 
-            entity.HasOne(d => d.Com).WithMany(p => p.RoomRequests).HasConstraintName("FK__RoomReque__ComId__5535A963");
+            entity.HasOne(d => d.Com).WithMany(p => p.RoomRequests).HasConstraintName("FK__RoomReque__ComId__534D60F1");
 
-            entity.HasOne(d => d.User).WithMany(p => p.RoomRequests).HasConstraintName("FK__RoomReque__UserI__5441852A");
+            entity.HasOne(d => d.User).WithMany(p => p.RoomRequests).HasConstraintName("FK__RoomReque__UserI__52593CB8");
         });
 
         modelBuilder.Entity<Status>(entity =>
         {
-            entity.HasKey(e => e.StatNum).HasName("PK__Status__C5F8EFB650218E99");
+            entity.HasKey(e => e.StatNum).HasName("PK__Status__C5F8EFB6DBFB433E");
 
             entity.Property(e => e.StatNum).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<TenantRoom>(entity =>
         {
-            entity.HasKey(e => new { e.ComId, e.KeyHolderId }).HasName("PK__TenantRo__18F0496942FB276A");
+            entity.HasKey(e => new { e.ComId, e.KeyHolderId }).HasName("PK__TenantRo__18F04969CA009291");
 
             entity.HasOne(d => d.Com).WithMany(p => p.TenantRooms)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__TenantRoo__ComId__4F7CD00D");
+                .HasConstraintName("FK__TenantRoo__ComId__4D94879B");
 
             entity.HasOne(d => d.KeyHolder).WithMany(p => p.TenantRooms)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__TenantRoo__KeyHo__5070F446");
+                .HasConstraintName("FK__TenantRoo__KeyHo__4E88ABD4");
         });
 
         modelBuilder.Entity<Type>(entity =>
         {
-            entity.HasKey(e => e.TypeNum).HasName("PK__Types__E237D7089F61C1B6");
+            entity.HasKey(e => e.TypeNum).HasName("PK__Types__E237D7085D7CF85C");
 
             entity.Property(e => e.TypeNum).ValueGeneratedNever();
         });
