@@ -160,16 +160,11 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
-            List<MemberCommunityDTO> memberCommunities = context.Members
-                .Where(m => m.UserId == id)
-                .Select(m => new MemberCommunityDTO
-                {
-                    Member = m,
-                    Community = context.Communities.FirstOrDefault(c => c.ComId == m.ComId)
-                })
+            List<Notice> comNotices = context.Notices
+                .Where(n => n.Coms.Any(c => c.ComId == ComId))
                 .ToList();
 
-            return Ok(memberCommunities);
+            return Ok(comNotices);
         }
         catch (Exception ex)
         {
@@ -178,34 +173,17 @@ public class CommunityAppServerAPIController : ControllerBase
     }
 
     [HttpGet("GetCommunityReports")]
-    public IActionResult GetCommunityReports(int id)
+    public IActionResult GetCommunityReports(int ComId)
     {
         try
         {
-            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
-            if (string.IsNullOrEmpty(userEmail))
-            {
-                return Unauthorized("User is not logged in");
-            }
 
-            Models.Account? account = context.GetAccount(userEmail);
-            context.ChangeTracker.Clear();
+            List<Report> comReports = context.Reports
+            .Where(r => r.ComId == ComId)
+            .ToList();
 
-            if (account == null || (account.Id != id))
-            {
-                return Unauthorized("User ID does not match");
-            }
 
-            List<MemberCommunityDTO> memberCommunities = context.Members
-                .Where(m => m.UserId == id)
-                .Select(m => new MemberCommunityDTO
-                {
-                    Member = m,
-                    Community = context.Communities.FirstOrDefault(c => c.ComId == m.ComId)
-                })
-                .ToList();
-
-            return Ok(memberCommunities);
+            return Ok(comReports);
         }
         catch (Exception ex)
         {
