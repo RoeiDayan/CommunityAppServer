@@ -31,7 +31,7 @@ public partial class Report
     public DateTime? CreatedAt { get; set; }
 
     [ForeignKey("ComId")]
-    [InverseProperty("Reports")]
+    [InverseProperty("ReportsNavigation")]
     public virtual Community? Com { get; set; }
 
     [ForeignKey("Priority")]
@@ -52,4 +52,8 @@ public partial class Report
     [ForeignKey("UserId")]
     [InverseProperty("Reports")]
     public virtual Account? User { get; set; }
+
+    [ForeignKey("ReportId")]
+    [InverseProperty("Reports")]
+    public virtual ICollection<Community> Coms { get; set; } = new List<Community>();
 }

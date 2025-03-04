@@ -155,7 +155,63 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
+    [HttpGet("GetCommunityNotices")]
+    public IActionResult GetCommunityNotices(int ComId)
+    {
+        try
+        {
+            List<MemberCommunityDTO> memberCommunities = context.Members
+                .Where(m => m.UserId == id)
+                .Select(m => new MemberCommunityDTO
+                {
+                    Member = m,
+                    Community = context.Communities.FirstOrDefault(c => c.ComId == m.ComId)
+                })
+                .ToList();
 
+            return Ok(memberCommunities);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("GetCommunityReports")]
+    public IActionResult GetCommunityReports(int id)
+    {
+        try
+        {
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            Models.Account? account = context.GetAccount(userEmail);
+            context.ChangeTracker.Clear();
+
+            if (account == null || (account.Id != id))
+            {
+                return Unauthorized("User ID does not match");
+            }
+
+            List<MemberCommunityDTO> memberCommunities = context.Members
+                .Where(m => m.UserId == id)
+                .Select(m => new MemberCommunityDTO
+                {
+                    Member = m,
+                    Community = context.Communities.FirstOrDefault(c => c.ComId == m.ComId)
+                })
+                .ToList();
+
+            return Ok(memberCommunities);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }
 
 

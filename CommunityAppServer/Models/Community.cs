@@ -38,7 +38,7 @@ public partial class Community
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     [InverseProperty("Com")]
-    public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
+    public virtual ICollection<Report> ReportsNavigation { get; set; } = new List<Report>();
 
     [InverseProperty("Com")]
     public virtual ICollection<RoomRequest> RoomRequests { get; set; } = new List<RoomRequest>();
@@ -49,4 +49,8 @@ public partial class Community
     [ForeignKey("ComId")]
     [InverseProperty("Coms")]
     public virtual ICollection<Notice> Notices { get; set; } = new List<Notice>();
+
+    [ForeignKey("ComId")]
+    [InverseProperty("Coms")]
+    public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
 }

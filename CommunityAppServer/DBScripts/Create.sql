@@ -31,6 +31,7 @@ CREATE TABLE Community (
   CreatedAt DATETIME DEFAULT GETDATE()
 );
 
+
 CREATE TABLE Members (
   ComId INT, 
   UserId INT,
@@ -99,6 +100,8 @@ CREATE TABLE Notices (
   FOREIGN KEY (UserId) REFERENCES Account(ID)
 );
 
+
+
 CREATE TABLE CommunityNotices (
   NoticeId INT,
   ComId INT,
@@ -107,6 +110,13 @@ CREATE TABLE CommunityNotices (
   FOREIGN KEY (ComId) REFERENCES Community(ComId)
 );
 
+CREATE TABLE CommunityReports (
+  ReportId INT,
+  ComId INT,
+  PRIMARY KEY (ReportId, ComId),
+  FOREIGN KEY (ReportId) REFERENCES Report(ReportId),
+  FOREIGN KEY (ComId) REFERENCES Community(ComId)
+);
 CREATE TABLE NoticeFiles (
   NoticeId INT,
   FileName NVARCHAR(255),  -- Added a column to store the file name
