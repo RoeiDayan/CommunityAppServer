@@ -166,10 +166,13 @@ CREATE TABLE RoomRequests (
 
 
 
-INSERT INTO Account (Email, Name, Password) VALUES ('admin@gmail.com', 'admin', 'admin1');
+INSERT INTO Account (Email, Name, Password) VALUES ('a@g.c', 'a', 'a');
 GO
 
 INSERT INTO [Community] (ComName, Body, ComCode, GatePhoneNum) VALUES ('Kehila', 'Welcome', '123', '0528185522')
+GO
+
+INSERT INTO [Community] (ComName, Body, ComCode, GatePhoneNum) VALUES ('Kehila2', 'Hola! Glad to have you!', '456', '0508182244')
 GO
 
 INSERT INTO [Members] 
@@ -178,10 +181,16 @@ VALUES
     (1, 1, 'Manager', 100, 1, 1, 1, 1, 1);
 GO
 
-INSERT INTO [Report]
-(UserId, ComId, [Text], [Priority], [Type], [Status], IsAnon)
- VALUES
-    (1, 1, 'Encountered a mess in the trash room.', 1, 1, 1, 0);
+INSERT INTO [Members] 
+    (UserId, ComId, [Role], Balance, UnitNum, IsLiable, IsResident, IsManager, IsProvider) 
+VALUES 
+    (1, 2, 'Resident', 50, 7, 1, 1, 0, 0);
+GO
+
+INSERT INTO [Notices]
+(UserId, Title, [Text], StartTime, EndTime)
+VALUES
+    (1, 'Beware of water supply cut', 'On monday the 28th water supply would be cut from 10AM until 2PM', '2025-03-10 10:00:00', '2025-03-10 14:00:00');
 Go
 
 INSERT INTO [Priority]
@@ -202,6 +211,14 @@ VALUES
     (1, 'Normal');
 Go
 
+INSERT INTO [Report]
+(UserId, ComId, [Text], [Priority], [Type], [Status], IsAnon)
+ VALUES
+    (1, 1, 'Encountered a mess in the trash room.', 1, 1, 1, 0);
+Go
+
+
+
 CREATE LOGIN [AdminLogin] WITH PASSWORD = 'ComPass';
 Go
 
@@ -219,3 +236,4 @@ select * from Account
 select * from Members
 select * from Community
 select * from Report
+select * from Notices
