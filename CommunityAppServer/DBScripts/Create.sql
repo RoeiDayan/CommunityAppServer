@@ -49,7 +49,8 @@ CREATE TABLE Members (
 
 
 
-CREATE TABLE Types (
+CREATE TABLE Types 
+(
   TypeNum INT PRIMARY KEY,
   [Type] NVARCHAR(10)
 );
@@ -61,7 +62,7 @@ CREATE TABLE Priority (
 
 CREATE TABLE Status (
   StatNum INT PRIMARY KEY,
-  Status NVARCHAR(10) 
+  [Status] NVARCHAR(10) 
 );
 
 CREATE TABLE Report (

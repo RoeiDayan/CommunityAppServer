@@ -101,12 +101,12 @@ public class CommunityAppServerAPIController : ControllerBase
                 return Unauthorized("User ID does not match");
             }
 
-            List<MemberCommunityDTO> memberCommunities = context.Members
+            List<DTO.MemberCommunity> memberCommunities = context.Members
                 .Where(m => m.UserId == id)
-                .Select(m => new MemberCommunityDTO
+                .Select(m => new DTO.MemberCommunity
                 {
-                    Member = m,
-                    Community = context.Communities.FirstOrDefault(c => c.ComId == m.ComId)
+                    Member = new DTO.Member(m),
+                    Community = new DTO.Community(context.Communities.FirstOrDefault(c => c.ComId == m.ComId))
                 })
                 .ToList();
 
