@@ -118,42 +118,42 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
-    [HttpPost("SignInToCommunity")]
-    public IActionResult SignInToCommunity([FromBody] int comId)
-    {
-        try
-        {
-            // Check if the user is logged in
-            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
-            if (string.IsNullOrEmpty(userEmail))
-            {
-                return Unauthorized("User is not logged in");
-            }
+    //[HttpPost("SignInToCommunity")]
+    //public IActionResult SignInToCommunity([FromBody] int comId)
+    //{
+    //    try
+    //    {
+    //        // Check if the user is logged in
+    //        string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+    //        if (string.IsNullOrEmpty(userEmail))
+    //        {
+    //            return Unauthorized("User is not logged in");
+    //        }
 
-            // Get the account of the logged-in user
-            Models.Account? account = context.GetAccount(userEmail);
-            if (account == null)
-            {
-                return Unauthorized("Invalid user session");
-            }
+    //        // Get the account of the logged-in user
+    //        Models.Account? account = context.GetAccount(userEmail);
+    //        if (account == null)
+    //        {
+    //            return Unauthorized("Invalid user session");
+    //        }
 
-            // Check if the user is a member of the community
-            bool isMember = context.Members.Any(m => m.UserId == account.Id && m.ComId == comId);
-            if (!isMember)
-            {
-                return Unauthorized("User is not a member of this community");
-            }
+    //        // Check if the user is a member of the community
+    //        bool isMember = context.Members.Any(m => m.UserId == account.Id && m.ComId == comId);
+    //        if (!isMember)
+    //        {
+    //            return Unauthorized("User is not a member of this community");
+    //        }
 
-            // Store the selected community in the session
-            HttpContext.Session.SetInt32("selectedCommunityId", comId);
+    //        // Store the selected community in the session
+    //        HttpContext.Session.SetInt32("selectedCommunityId", comId);
 
-            return Ok("Sign-in to community successful");
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
+    //        return Ok("Sign-in to community successful");
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return BadRequest(ex.Message);
+    //    }
+    //}
 
     [HttpGet("GetCommunityNotices")]
     public IActionResult GetCommunityNotices(int ComId)
