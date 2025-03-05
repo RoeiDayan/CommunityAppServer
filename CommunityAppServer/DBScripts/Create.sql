@@ -80,7 +80,6 @@ CREATE TABLE Report (
   FOREIGN KEY (Type) REFERENCES Types(TypeNum),
   FOREIGN KEY (Status) REFERENCES Status(StatNum)
 );
-
 CREATE TABLE ReportFiles (
   ReportId INT,
   FileName NVARCHAR(255),  -- Added a column to store the file name
@@ -99,7 +98,13 @@ CREATE TABLE Notices (
   CreatedAt DATETIME DEFAULT GETDATE(),
   FOREIGN KEY (UserId) REFERENCES Account(ID)
 );
-
+CREATE TABLE NoticeFiles (
+  NoticeId INT,
+  FileName NVARCHAR(255),  -- Added a column to store the file name
+  NoticeFileExt NVARCHAR(5), 
+  PRIMARY KEY (NoticeId, FileName),
+  FOREIGN KEY (NoticeId) REFERENCES Notices(NoticeId)
+);
 
 
 CREATE TABLE CommunityNotices (
@@ -117,13 +122,7 @@ CREATE TABLE CommunityReports (
   FOREIGN KEY (ReportId) REFERENCES Report(ReportId),
   FOREIGN KEY (ComId) REFERENCES Community(ComId)
 );
-CREATE TABLE NoticeFiles (
-  NoticeId INT,
-  FileName NVARCHAR(255),  -- Added a column to store the file name
-  NoticeFileExt NVARCHAR(5), 
-  PRIMARY KEY (NoticeId, FileName),
-  FOREIGN KEY (NoticeId) REFERENCES Notices(NoticeId)
-);
+
 
 CREATE TABLE Payments 
 (
@@ -178,7 +177,29 @@ VALUES
     (1, 1, 'Manager', 100, 1, 1, 1, 1, 1);
 GO
 
+INSERT INTO [Report]
+(UserId, ComId, [Text], [Priority], [Type], [Status], IsAnon)
+ VALUES
+    (1, 1, 'Encountered a mess in the trash room.', 1, 1, 1, 0);
+Go
 
+INSERT INTO [Priority]
+(PriorityNum, Priority)
+VALUES 
+    (1, 'Normal');
+Go
+
+INSERT INTO [Types]
+(TypeNum, [Type])
+VALUES 
+    (1, 'Normal');
+Go
+
+INSERT INTO Status
+(StatNum, [Status])
+VALUES 
+    (1, 'Normal');
+Go
 
 CREATE LOGIN [AdminLogin] WITH PASSWORD = 'ComPass';
 Go
@@ -196,3 +217,4 @@ scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=CommunityDB;
 select * from Account
 select * from Members
 select * from Community
+select * from Report
