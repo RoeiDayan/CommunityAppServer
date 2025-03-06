@@ -175,6 +175,9 @@ GO
 INSERT INTO [Community] (ComName, Body, ComCode, GatePhoneNum) VALUES ('Kehila2', 'Hola! Glad to have you!', '456', '0508182244')
 GO
 
+INSERT INTO [Community] (ComName, Body, ComCode, GatePhoneNum) VALUES ('Kehila3', 'Shalom! Excited to have you back', '456', '0501812244')
+GO
+
 INSERT INTO [Members] 
     (UserId, ComId, [Role], Balance, UnitNum, IsLiable, IsResident, IsManager, IsProvider) 
 VALUES 
@@ -185,6 +188,12 @@ INSERT INTO [Members]
     (UserId, ComId, [Role], Balance, UnitNum, IsLiable, IsResident, IsManager, IsProvider) 
 VALUES 
     (1, 2, 'Resident', 50, 7, 1, 1, 0, 0);
+GO
+
+INSERT INTO [Members] 
+    (UserId, ComId, [Role], Balance, UnitNum, IsLiable, IsResident, IsManager, IsProvider) 
+VALUES 
+    (1, 3, 'Resident', 0, 13, 0, 1, 0, 0);
 GO
 
 INSERT INTO [Notices]
