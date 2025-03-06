@@ -166,7 +166,7 @@ CREATE TABLE RoomRequests (
 
 
 
-INSERT INTO Account (Email, Name, Password) VALUES ('a@g.c', 'a', 'a');
+INSERT INTO Account (Email, Name, Password) VALUES ('a', 'a', 'a');
 GO
 
 INSERT INTO [Community] (ComName, Body, ComCode, GatePhoneNum) VALUES ('Kehila', 'Welcome', '123', '0528185522')
@@ -220,7 +220,7 @@ Go
 INSERT INTO [CommunityNotices]
 (ComId, NoticeId)
     VALUES
-    (1, 2);
+    (1, 1);
 Go
 
 
