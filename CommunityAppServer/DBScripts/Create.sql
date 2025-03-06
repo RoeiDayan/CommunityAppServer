@@ -217,6 +217,11 @@ INSERT INTO [Report]
     (1, 1, 'Encountered a mess in the trash room.', 1, 1, 1, 0);
 Go
 
+INSERT INTO [CommunityNotices]
+(ComId, NoticeId)
+    VALUES
+    (1, 2);
+Go
 
 
 CREATE LOGIN [AdminLogin] WITH PASSWORD = 'ComPass';
@@ -237,3 +242,4 @@ select * from Members
 select * from Community
 select * from Report
 select * from Notices
+select * from CommunityNotices
