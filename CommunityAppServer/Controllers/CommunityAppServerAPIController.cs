@@ -161,8 +161,8 @@ public class CommunityAppServerAPIController : ControllerBase
         try
         {
             List<Notice> comNotices = context.Notices
-                .Where(n => n.Coms.Any(c => c.ComId == ComId))
-                .ToList();
+             .Where(n => n.Coms.Any(c => c.ComId == ComId))
+             .ToList();
 
             return Ok(comNotices);
         }
@@ -181,7 +181,6 @@ public class CommunityAppServerAPIController : ControllerBase
             List<Report> comReports = context.Reports
             .Where(r => r.ComId == ComId)
             .ToList();
-
 
             return Ok(comReports);
         }
