@@ -9,16 +9,16 @@ namespace CommunityAppServer.DTO
         [Key]
         public int ReportId { get; set; }
 
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
 
-        public int? ComId { get; set; }
+        public int ComId { get; set; }
 
         [Column(TypeName = "text")]
         public string? Text { get; set; }
 
-        public int? Priority { get; set; }
+        public int Priority { get; set; }
 
-        public int? Status { get; set; }
+        public int Status { get; set; }
 
         public bool? IsAnon { get; set; }
 

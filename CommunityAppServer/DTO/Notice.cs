@@ -8,7 +8,7 @@ namespace CommunityAppServer.DTO
         [Key]
         public int NoticeId { get; set; }
 
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
 
         [StringLength(100)]
         public string? Title { get; set; }
