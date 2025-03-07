@@ -23,9 +23,9 @@ public partial class Report
 
     public string? Text { get; set; }
 
-    public int Priority { get; set; }
+    public int? Priority { get; set; }
 
-    public int Status { get; set; }
+    public int? Status { get; set; }
 
     public bool? IsAnon { get; set; }
 
@@ -38,14 +38,14 @@ public partial class Report
 
     [ForeignKey("Priority")]
     [InverseProperty("Reports")]
-    public virtual Priority PriorityNavigation { get; set; } = null!;
+    public virtual Priority? PriorityNavigation { get; set; }
 
     [InverseProperty("Report")]
     public virtual ICollection<ReportFile> ReportFiles { get; set; } = new List<ReportFile>();
 
     [ForeignKey("Status")]
     [InverseProperty("Reports")]
-    public virtual Status StatusNavigation { get; set; } = null!;
+    public virtual Status? StatusNavigation { get; set; }
 
     [ForeignKey("UserId")]
     [InverseProperty("Reports")]
