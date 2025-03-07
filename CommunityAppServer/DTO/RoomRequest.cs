@@ -8,15 +8,15 @@ namespace CommunityAppServer.DTO
         [Key]
         public int RequestId { get; set; }
 
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
 
-        public int? ComId { get; set; }
-
-        [Column(TypeName = "datetime")]
-        public DateTime? StartTime { get; set; }
+        public int ComId { get; set; }
 
         [Column(TypeName = "datetime")]
-        public DateTime? EndTime { get; set; }
+        public DateTime StartTime { get; set; }
+
+        [Column(TypeName = "datetime")]
+        public DateTime EndTime { get; set; }
 
         [Column(TypeName = "text")]
         public string? Text { get; set; }
