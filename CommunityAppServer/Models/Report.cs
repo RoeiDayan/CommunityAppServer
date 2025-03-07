@@ -21,8 +21,6 @@ public partial class Report
 
     public int? Priority { get; set; }
 
-    public int? Type { get; set; }
-
     public int? Status { get; set; }
 
     public bool? IsAnon { get; set; }
@@ -47,10 +45,6 @@ public partial class Report
     [ForeignKey("Status")]
     [InverseProperty("Reports")]
     public virtual Status? StatusNavigation { get; set; }
-
-    [ForeignKey("Type")]
-    [InverseProperty("Reports")]
-    public virtual Type? TypeNavigation { get; set; }
 
     [ForeignKey("UserId")]
     [InverseProperty("Reports")]

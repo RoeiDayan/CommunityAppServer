@@ -39,8 +39,6 @@ public partial class CommunityDBContext : DbContext
 
     public virtual DbSet<TenantRoom> TenantRooms { get; set; }
 
-    public virtual DbSet<Type> Types { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server = (localdb)\\MSSQLLocalDB;Initial Catalog=CommunityDB;User ID=AdminLogin;Password=ComPass;");
@@ -138,8 +136,6 @@ public partial class CommunityDBContext : DbContext
 
             entity.HasOne(d => d.StatusNavigation).WithMany(p => p.Reports).HasConstraintName("FK__Report__Status__398D8EEE");
 
-            entity.HasOne(d => d.TypeNavigation).WithMany(p => p.Reports).HasConstraintName("FK__Report__Type__38996AB5");
-
             entity.HasOne(d => d.User).WithMany(p => p.Reports).HasConstraintName("FK__Report__UserId__35BCFE0A");
 
             entity.HasMany(d => d.Coms).WithMany(p => p.Reports)
@@ -198,13 +194,6 @@ public partial class CommunityDBContext : DbContext
             entity.HasOne(d => d.KeyHolder).WithMany(p => p.TenantRooms)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__TenantRoo__KeyHo__52593CB8");
-        });
-
-        modelBuilder.Entity<Type>(entity =>
-        {
-            entity.HasKey(e => e.TypeNum).HasName("PK__Types__E237D708FFA99CFC");
-
-            entity.Property(e => e.TypeNum).ValueGeneratedNever();
         });
 
         OnModelCreatingPartial(modelBuilder);

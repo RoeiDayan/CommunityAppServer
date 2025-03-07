@@ -49,12 +49,6 @@ CREATE TABLE Members (
 
 
 
-CREATE TABLE Types 
-(
-  TypeNum INT PRIMARY KEY,
-  [Type] NVARCHAR(10)
-);
-
 CREATE TABLE Priority (
   PriorityNum INT PRIMARY KEY,
   Priority NVARCHAR(10)
@@ -72,14 +66,12 @@ CREATE TABLE Report (
   Title NVARCHAR(255) NOT NULL DEFAULT '',
   Text TEXT,
   Priority INT,
-  Type INT,
   Status INT,
   IsAnon BIT,
   CreatedAt DATETIME DEFAULT GETDATE(),
   FOREIGN KEY (UserId) REFERENCES Account(ID),
   FOREIGN KEY (ComId) REFERENCES Community(ComId),
   FOREIGN KEY (Priority) REFERENCES Priority(PriorityNum),
-  FOREIGN KEY (Type) REFERENCES Types(TypeNum),
   FOREIGN KEY (Status) REFERENCES Status(StatNum)
 );
 
@@ -248,27 +240,27 @@ VALUES
 Go
 
 INSERT INTO [Report]
-(UserId, ComId, [Text], [Priority], [Type], [Status], IsAnon, Title)
+(UserId, ComId, [Text], [Priority], , [Status], IsAnon, Title)
  VALUES
-    (1, 1, 'Encountered a mess in the trash room.', 1, 1, 1, 0, 'Watch out!');
+    (1, 1, 'Encountered a mess in the trash room.', 1, 1, 0, 'Watch out!');
 Go
 
 INSERT INTO [Report]
-(UserId, ComId, [Text], [Priority], [Type], [Status], IsAnon, Title)
+(UserId, ComId, [Text], [Priority], [Status], IsAnon, Title)
 VALUES
-    (1, 1, 'The elevator has been stuck for hours, causing inconvenience.', 1, 1, 1, 1, 'Elevator Problem');
+    (1, 1, 'The elevator has been stuck for hours, causing inconvenience.', 1, 1, 1, 'Elevator Problem');
 GO
 
 INSERT INTO [Report]
-(UserId, ComId, [Text], [Priority], [Type], [Status], IsAnon, Title)
+(UserId, ComId, [Text], [Priority], [Status], IsAnon, Title)
 VALUES
-    (1, 1, 'The building security system is malfunctioning, needs immediate attention.', 1, 1, 1, 1, 'Security Issue');
+    (1, 1, 'The building security system is malfunctioning, needs immediate attention.', 1, 1, 1, 'Security Issue');
 GO
 
 INSERT INTO [Report]
-(UserId, ComId, [Text], [Priority], [Type], [Status], IsAnon, Title)
+(UserId, ComId, [Text], [Priority], [Status], IsAnon, Title)
 VALUES
-    (1, 1, 'The lighting in the parking lot is insufficient and dangerous.', 1, 1, 1, 1, 'Parking Lot Lighting');
+    (1, 1, 'The lighting in the parking lot is insufficient and dangerous.', 1, 1, 1, 'Parking Lot Lighting');
 GO
 
 
