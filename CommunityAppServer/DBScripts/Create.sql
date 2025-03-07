@@ -201,6 +201,33 @@ INSERT INTO [Notices]
 VALUES
     (1, 'Beware of water supply cut', 'On monday the 28th water supply would be cut from 10AM until 2PM', '2025-03-10 10:00:00', '2025-03-10 14:00:00');
 Go
+INSERT INTO [CommunityNotices]
+(ComId, NoticeId)
+    VALUES
+    (1, 1);
+Go
+
+INSERT INTO [Notices]
+(UserId, Title, [Text], StartTime, EndTime)
+VALUES
+    (1, 'Beware of problem with trash cleaning', 'On sunday the 27th cleaning would be stopped from 8AM until 1PM', '2025-03-10 8:00:00', '2025-03-10 13:00:00');
+Go
+INSERT INTO [CommunityNotices]
+(ComId, NoticeId)
+    VALUES
+    (1, 3);
+Go
+
+INSERT INTO [Notices]
+(UserId, Title, [Text], StartTime, EndTime)
+VALUES
+    (1, 'Beware of parking lot cleaning', 'Tommorow thursday the 14th the parking lot will be cleaned and wont be accesible. All cars must evavuate ahead of time. Will last from 9AM until 5PM', '2025-03-10 10:00:00', '2025-03-10 17:00:00');
+Go
+INSERT INTO [CommunityNotices]
+(ComId, NoticeId)
+    VALUES
+    (1, 4);
+Go
 
 INSERT INTO [Priority]
 (PriorityNum, Priority)
@@ -225,6 +252,25 @@ INSERT INTO [Report]
  VALUES
     (1, 1, 'Encountered a mess in the trash room.', 1, 1, 1, 0, 'Watch out!');
 Go
+
+INSERT INTO [Report]
+(UserId, ComId, [Text], [Priority], [Type], [Status], IsAnon, Title)
+VALUES
+    (1, 1, 'The elevator has been stuck for hours, causing inconvenience.', 1, 1, 1, 1, 'Elevator Problem');
+GO
+
+INSERT INTO [Report]
+(UserId, ComId, [Text], [Priority], [Type], [Status], IsAnon, Title)
+VALUES
+    (1, 1, 'The building security system is malfunctioning, needs immediate attention.', 1, 1, 1, 1, 'Security Issue');
+GO
+
+INSERT INTO [Report]
+(UserId, ComId, [Text], [Priority], [Type], [Status], IsAnon, Title)
+VALUES
+    (1, 1, 'The lighting in the parking lot is insufficient and dangerous.', 1, 1, 1, 1, 'Parking Lot Lighting');
+GO
+
 
 INSERT INTO [CommunityNotices]
 (ComId, NoticeId)
