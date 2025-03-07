@@ -27,6 +27,8 @@ namespace CommunityAppServer.DTO
         [Column(TypeName = "datetime")]
         public DateTime? CreatedAt { get; set; }
 
+        public string Title { get; set; } = null!;
+
         //[ForeignKey("ComId")]
         //[InverseProperty("Reports")]
         //public virtual Community? Com { get; set; }

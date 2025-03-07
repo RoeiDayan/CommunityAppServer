@@ -69,6 +69,7 @@ CREATE TABLE Report (
   ReportId INT IDENTITY(1,1) PRIMARY KEY,
   UserId INT,
   ComId INT,
+  Title NVARCHAR(255) NOT NULL DEFAULT '',
   Text TEXT,
   Priority INT,
   Type INT,
@@ -81,6 +82,7 @@ CREATE TABLE Report (
   FOREIGN KEY (Type) REFERENCES Types(TypeNum),
   FOREIGN KEY (Status) REFERENCES Status(StatNum)
 );
+
 CREATE TABLE ReportFiles (
   ReportId INT,
   FileName NVARCHAR(255),  -- Added a column to store the file name
@@ -164,8 +166,6 @@ CREATE TABLE RoomRequests (
 );
 
 
-
-
 INSERT INTO Account (Email, Name, Password) VALUES ('a', 'a', 'a');
 GO
 
@@ -221,9 +221,9 @@ VALUES
 Go
 
 INSERT INTO [Report]
-(UserId, ComId, [Text], [Priority], [Type], [Status], IsAnon)
+(UserId, ComId, [Text], [Priority], [Type], [Status], IsAnon, Title)
  VALUES
-    (1, 1, 'Encountered a mess in the trash room.', 1, 1, 1, 0);
+    (1, 1, 'Encountered a mess in the trash room.', 1, 1, 1, 0, 'Watch out!');
 Go
 
 INSERT INTO [CommunityNotices]
@@ -245,7 +245,6 @@ Go
 /*
 scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=CommunityDB;User ID=AdminLogin;Password=ComPass;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context CommunityDBContext -DataAnnotations –force
 */
-
 select * from Account
 select * from Members
 select * from Community

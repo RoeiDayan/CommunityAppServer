@@ -30,6 +30,9 @@ public partial class Report
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }
 
+    [StringLength(255)]
+    public string Title { get; set; } = null!;
+
     [ForeignKey("ComId")]
     [InverseProperty("ReportsNavigation")]
     public virtual Community? Com { get; set; }
