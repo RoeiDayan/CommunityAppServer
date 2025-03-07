@@ -13,8 +13,8 @@ public partial class Priority
     public int PriorityNum { get; set; }
 
     [Column("Priority")]
-    [StringLength(10)]
-    public string? Priority1 { get; set; }
+    [StringLength(20)]
+    public string Priority1 { get; set; } = null!;
 
     [InverseProperty("PriorityNavigation")]
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();

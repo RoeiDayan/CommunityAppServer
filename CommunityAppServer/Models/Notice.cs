@@ -6,17 +6,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommunityAppServer.Models;
 
+[Index("EndTime", Name = "IX_Notices_EndTime")]
+[Index("StartTime", Name = "IX_Notices_StartTime")]
+[Index("UserId", Name = "IX_Notices_UserId")]
 public partial class Notice
 {
     [Key]
     public int NoticeId { get; set; }
 
-    public int? UserId { get; set; }
+    public int UserId { get; set; }
 
     [StringLength(100)]
-    public string? Title { get; set; }
+    public string Title { get; set; } = null!;
 
-    [Column(TypeName = "text")]
     public string? Text { get; set; }
 
     [Column(TypeName = "datetime")]
@@ -33,7 +35,7 @@ public partial class Notice
 
     [ForeignKey("UserId")]
     [InverseProperty("Notices")]
-    public virtual Account? User { get; set; }
+    public virtual Account User { get; set; } = null!;
 
     [ForeignKey("NoticeId")]
     [InverseProperty("Notices")]

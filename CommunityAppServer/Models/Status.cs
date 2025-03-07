@@ -13,8 +13,8 @@ public partial class Status
     public int StatNum { get; set; }
 
     [Column("Status")]
-    [StringLength(10)]
-    public string? Status1 { get; set; }
+    [StringLength(20)]
+    public string Status1 { get; set; } = null!;
 
     [InverseProperty("StatusNavigation")]
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();

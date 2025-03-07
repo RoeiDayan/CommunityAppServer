@@ -18,8 +18,6 @@ namespace CommunityAppServer.DTO
 
         public int? Priority { get; set; }
 
-        public int? Type { get; set; }
-
         public int? Status { get; set; }
 
         public bool? IsAnon { get; set; }
@@ -60,7 +58,6 @@ namespace CommunityAppServer.DTO
             rep.ComId = ComId;
             rep.Text = Text;
             rep.Priority = Priority;
-            rep.Type = Type;
             rep.Status = Status;
             rep.IsAnon = IsAnon;
             rep.CreatedAt = CreatedAt;
@@ -73,7 +70,6 @@ namespace CommunityAppServer.DTO
             this.ComId = rep.ComId;
             this.Text = rep.Text;
             this.Priority = rep.Priority;
-            this.Type = rep.Type;
             this.Status = rep.Status;
             this.IsAnon = rep.IsAnon;
             this.CreatedAt = rep.CreatedAt;

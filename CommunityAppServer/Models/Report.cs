@@ -7,50 +7,47 @@ using Microsoft.EntityFrameworkCore;
 namespace CommunityAppServer.Models;
 
 [Table("Report")]
+[Index("CreatedAt", Name = "IX_Report_CreatedAt")]
+[Index("UserId", "ComId", Name = "IX_Report_UserId_ComId")]
 public partial class Report
 {
     [Key]
     public int ReportId { get; set; }
 
-    public int? UserId { get; set; }
+    public int UserId { get; set; }
 
-    public int? ComId { get; set; }
+    public int ComId { get; set; }
 
-    [Column(TypeName = "text")]
+    [StringLength(255)]
+    public string Title { get; set; } = null!;
+
     public string? Text { get; set; }
 
-    public int? Priority { get; set; }
+    public int Priority { get; set; }
 
-    public int? Status { get; set; }
+    public int Status { get; set; }
 
     public bool? IsAnon { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }
 
-    [StringLength(255)]
-    public string Title { get; set; } = null!;
-
     [ForeignKey("ComId")]
-    [InverseProperty("ReportsNavigation")]
-    public virtual Community? Com { get; set; }
+    [InverseProperty("Reports")]
+    public virtual Community Com { get; set; } = null!;
 
     [ForeignKey("Priority")]
     [InverseProperty("Reports")]
-    public virtual Priority? PriorityNavigation { get; set; }
+    public virtual Priority PriorityNavigation { get; set; } = null!;
 
     [InverseProperty("Report")]
     public virtual ICollection<ReportFile> ReportFiles { get; set; } = new List<ReportFile>();
 
     [ForeignKey("Status")]
     [InverseProperty("Reports")]
-    public virtual Status? StatusNavigation { get; set; }
+    public virtual Status StatusNavigation { get; set; } = null!;
 
     [ForeignKey("UserId")]
     [InverseProperty("Reports")]
-    public virtual Account? User { get; set; }
-
-    [ForeignKey("ReportId")]
-    [InverseProperty("Reports")]
-    public virtual ICollection<Community> Coms { get; set; } = new List<Community>();
+    public virtual Account User { get; set; } = null!;
 }

@@ -15,8 +15,8 @@ public partial class Member
     [Key]
     public int UserId { get; set; }
 
-    [StringLength(20)]
-    public string? Role { get; set; }
+    [StringLength(50)]
+    public string Role { get; set; } = null!;
 
     public int? Balance { get; set; }
 

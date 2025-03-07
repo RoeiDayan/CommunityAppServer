@@ -32,7 +32,6 @@ CREATE TABLE Community (
   CreatedAt DATETIME DEFAULT GETDATE()
 );
 
-
 CREATE TABLE Members (
   ComId INT, 
   UserId INT,
@@ -77,21 +76,20 @@ CREATE TABLE Report (
 CREATE INDEX IX_Report_CreatedAt ON Report(CreatedAt);
 CREATE INDEX IX_Report_UserId_ComId ON Report(UserId, ComId);
 
-
 CREATE TABLE Notices (
   NoticeId INT IDENTITY(1,1) PRIMARY KEY,
   UserId INT NOT NULL,
   Title NVARCHAR(100) NOT NULL, 
   Text NVARCHAR(MAX),
-  StartTime DATETIME NOT NULL,
-  EndTime DATETIME NOT NULL,
+  StartTime DATETIME,
+  EndTime DATETIME,
   CreatedAt DATETIME DEFAULT GETDATE(),
   FOREIGN KEY (UserId) REFERENCES Account(ID) ON DELETE CASCADE
 );
+
 CREATE INDEX IX_Notices_UserId ON Notices(UserId);
 CREATE INDEX IX_Notices_StartTime ON Notices(StartTime);
 CREATE INDEX IX_Notices_EndTime ON Notices(EndTime);
-
 
 CREATE TABLE CommunityNotices (
   NoticeId INT,
@@ -127,6 +125,35 @@ CREATE TABLE RoomRequests (
   FOREIGN KEY (ComId) REFERENCES Community(ComId) ON DELETE CASCADE
 );
 
+CREATE TABLE TenantRoom (
+  ComId INT,
+  Status NVARCHAR(10),
+  KeyHolderId INT,
+  SessionStart DATETIME,
+  SessionEnd DATETIME,
+  PRIMARY KEY (ComId, KeyHolderId),
+  FOREIGN KEY (ComId) REFERENCES Community(ComId),
+  FOREIGN KEY (KeyHolderId) REFERENCES Account(ID)
+);
+
+-- Create the ReportFiles table
+CREATE TABLE ReportFiles (
+  ReportId INT,
+  FileName NVARCHAR(255),  -- Added a column to store the file name
+  RepFileExt NVARCHAR(5), 
+  PRIMARY KEY (ReportId, FileName),
+  FOREIGN KEY (ReportId) REFERENCES Report(ReportId)
+);
+
+-- Create the NoticeFiles table
+CREATE TABLE NoticeFiles (
+  NoticeId INT,
+  FileName NVARCHAR(255),  -- Added a column to store the file name
+  NoticeFileExt NVARCHAR(5), 
+  PRIMARY KEY (NoticeId, FileName),
+  FOREIGN KEY (NoticeId) REFERENCES Notices(NoticeId)
+);
+
 -- Insert Initial Data
 INSERT INTO Account (Email, Name, Password) VALUES ('a', 'a', 'a');
 
@@ -151,20 +178,25 @@ VALUES
   (1, 1, 'Encountered a mess in the trash room.', 1, 1, 0, 'Watch out!'),
   (1, 1, 'The elevator has been stuck for hours, causing inconvenience.', 1, 1, 1, 'Elevator Problem');
 
--- Create Admin Login
-CREATE LOGIN [AdminLogin] WITH PASSWORD = 'ComPass';
-CREATE USER [Manager] FOR LOGIN [AdminLogin];
-ALTER ROLE db_owner ADD MEMBER [Manager];
+-- Select Data for Debugging
+SELECT * FROM Account;
+SELECT * FROM Members;
+SELECT * FROM Community;
+SELECT * FROM Report;
+SELECT * FROM Notices;
+SELECT * FROM CommunityNotices;
+SELECT * FROM Members;
 
+CREATE LOGIN [AdminLogin] WITH PASSWORD = 'ComPass';
+Go
+
+CREATE USER [Manager] FOR LOGIN [AdminLogin];
+Go
+
+ALTER ROLE db_owner ADD MEMBER [Manager]
+Go
 
 /*
 scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=CommunityDB;User ID=AdminLogin;Password=ComPass;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context CommunityDBContext -DataAnnotations –force
 */
-select * from Account
-select * from Members
-select * from Community
-select * from Report
-select * from Notices
-select * from CommunityNotices
-select * from Members
 
