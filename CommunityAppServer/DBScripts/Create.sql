@@ -62,7 +62,7 @@ CREATE TABLE Report (
   UserId INT NOT NULL,
   ComId INT NOT NULL,
   Title NVARCHAR(255) NOT NULL DEFAULT '',
-  Text NVARCHAR(MAX),
+  ReportDesc NVARCHAR(MAX),
   Priority INT,
   Status INT,
   IsAnon BIT DEFAULT 0,
@@ -199,4 +199,5 @@ Go
 /*
 scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=CommunityDB;User ID=AdminLogin;Password=ComPass;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context CommunityDBContext -DataAnnotations –force
 */
+
 

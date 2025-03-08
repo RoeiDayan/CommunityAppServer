@@ -21,7 +21,7 @@ public partial class Report
     [StringLength(255)]
     public string Title { get; set; } = null!;
 
-    public string? Text { get; set; }
+    public string? ReportDesc { get; set; }
 
     public int? Priority { get; set; }
 

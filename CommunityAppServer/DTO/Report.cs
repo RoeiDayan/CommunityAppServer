@@ -13,8 +13,7 @@ namespace CommunityAppServer.DTO
 
         public int ComId { get; set; }
 
-        [Column(TypeName = "text")]
-        public string? Text { get; set; }
+        public string? ReportDesc { get; set; }
 
         public int? Priority { get; set; }
 
@@ -56,7 +55,7 @@ namespace CommunityAppServer.DTO
             rep.ReportId = ReportId;
             rep.UserId = UserId;
             rep.ComId = ComId;
-            rep.Text = Text;
+            rep.ReportDesc = ReportDesc;
             rep.Priority = Priority;
             rep.Status = Status;
             rep.IsAnon = IsAnon;
@@ -68,7 +67,7 @@ namespace CommunityAppServer.DTO
             this.ReportId = rep.ReportId;
             this.UserId = rep.UserId;
             this.ComId = rep.ComId;
-            this.Text = rep.Text;
+            this.ReportDesc = rep.ReportDesc;
             this.Priority = rep.Priority;
             this.Status = rep.Status;
             this.IsAnon = rep.IsAnon;
