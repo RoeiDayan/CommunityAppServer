@@ -173,7 +173,7 @@ INSERT INTO Priority (PriorityNum, Priority) VALUES (1, 'Normal');
 
 INSERT INTO Status (StatNum, [Status]) VALUES (1, 'Normal');
 
-INSERT INTO Report (UserId, ComId, [Text], [Priority], [Status], IsAnon, Title)
+INSERT INTO Report (UserId, ComId, ReportDesc, [Priority], [Status], IsAnon, Title)
 VALUES 
   (1, 1, 'Encountered a mess in the trash room.', 1, 1, 0, 'Watch out!'),
   (1, 1, 'The elevator has been stuck for hours, causing inconvenience.', 1, 1, 1, 'Elevator Problem');

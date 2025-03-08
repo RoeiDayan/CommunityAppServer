@@ -189,7 +189,37 @@ public class CommunityAppServerAPIController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpPost("CreateReport")]
+    public IActionResult CreateReport([FromBody] DTO.Report rep)
+    {
+        try
+        {
+            Models.Report modelsReport = rep.GetReport();
+
+            context.Reports.Add(modelsReport);
+
+            // Save changes and check if any rows were affected
+            int changes = context.SaveChanges();
+
+            if (changes > 0)
+            {
+                return Ok(true);  // Successfully created the report
+            }
+            else
+            {
+                return Ok(false);  // No report was created
+            }
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);  // Return error message if an exception occurs
+        }
+    }
+
+
 }
+
 
 
 
