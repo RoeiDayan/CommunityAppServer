@@ -6,12 +6,13 @@ namespace CommunityAppServer.DTO
 {
     public class Report
     {
-        [Key]
         public int ReportId { get; set; }
 
         public int UserId { get; set; }
 
         public int ComId { get; set; }
+
+        public string Title { get; set; } = null!;
 
         public string? ReportDesc { get; set; }
 
@@ -21,10 +22,7 @@ namespace CommunityAppServer.DTO
 
         public bool? IsAnon { get; set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? CreatedAt { get; set; }
-
-        public string Title { get; set; } = null!;
 
         //[ForeignKey("ComId")]
         //[InverseProperty("Reports")]

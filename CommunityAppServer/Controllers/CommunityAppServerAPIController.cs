@@ -195,8 +195,14 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            // Ensure that the GetReport() method is returning a valid object.
             Models.Report modelsReport = rep.GetReport();
+            if (modelsReport == null)
+            {
+                return BadRequest("Invalid report data.");
+            }
 
+            // Add the report to the context
             context.Reports.Add(modelsReport);
 
             // Save changes and check if any rows were affected
@@ -208,14 +214,19 @@ public class CommunityAppServerAPIController : ControllerBase
             }
             else
             {
-                return Ok(false);  // No report was created
+                return Ok(false);  // No report was created, possibly due to validation or constraints
             }
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);  // Return error message if an exception occurs
+            // Log the exception (using your preferred logging framework)
+            // For example: _logger.LogError(ex, "Error creating report.");
+
+            return BadRequest($"Error: {ex.Message}");  // Return detailed error message
         }
     }
+
+
 
 
 }
