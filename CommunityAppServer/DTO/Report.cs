@@ -6,6 +6,7 @@ namespace CommunityAppServer.DTO
 {
     public class Report
     {
+        public Report() { }
         public int ReportId { get; set; }
 
         public int UserId { get; set; }
