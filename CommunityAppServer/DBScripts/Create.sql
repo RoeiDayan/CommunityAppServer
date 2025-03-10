@@ -169,9 +169,13 @@ VALUES
   (1, 2, 'Resident', 50, 7, 1, 1, 0, 0),
   (1, 3, 'Resident', 0, 13, 0, 1, 0, 0);
 
-INSERT INTO Priority (PriorityNum, Priority) VALUES (1, 'Normal');
+INSERT INTO Priority (PriorityNum, Priority) VALUES 
+(0,'Low'),
+(1, 'Normal');
 
-INSERT INTO Status (StatNum, [Status]) VALUES (1, 'Normal');
+INSERT INTO Status (StatNum, [Status]) VALUES 
+(0,'No Status'),
+(1, 'Normal');
 
 INSERT INTO Report (UserId, ComId, ReportDesc, [Priority], [Status], IsAnon, Title)
 VALUES 
