@@ -182,6 +182,15 @@ VALUES
   (1, 1, 'Encountered a mess in the trash room.', 1, 1, 0, 'Watch out!'),
   (1, 1, 'The elevator has been stuck for hours, causing inconvenience.', 1, 1, 1, 'Elevator Problem');
 
+INSERT INTO Notices(UserId, Title, Text, StartTime, EndTime)
+VALUES
+    (1, 'Beware of power outtage between 8AM and 2PM', 'During monday the 11th there will be no power due to maintnance', '2025-3-11 8:00:00', '2025-3-11 14:00:00'),
+    (1, 'Community Meeting Reminder', 'A community meeting will be held at the main hall on March 15th at 6 PM.', '2025-03-15 18:00:00', '2025-03-15 20:00:00'),
+
+    (1, 'Water Supply Interruption', 'Water supply will be temporarily unavailable on March 20th from 10 AM to 4 PM due to pipeline maintenance.', '2025-03-20 10:00:00', '2025-03-20 16:00:00'),
+
+    (1, 'Garbage Collection Delay', 'Garbage collection will be delayed by a day due to a public holiday. Please place bins out on Tuesday instead of Monday.', '2025-03-18 00:00:00', '2025-03-18 23:59:59');
+
 -- Select Data for Debugging
 SELECT * FROM Account;
 SELECT * FROM Members;
