@@ -25,6 +25,7 @@ namespace CommunityAppServer.DTO
         public bool? IsManager { get; set; }
 
         public bool? IsProvider { get; set; }
+        public bool? IsApproved { get; set; }
 
         //[ForeignKey("ComId")]
         //[InverseProperty("Members")]

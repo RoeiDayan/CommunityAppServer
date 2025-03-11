@@ -30,6 +30,8 @@ public partial class Member
 
     public bool? IsProvider { get; set; }
 
+    public bool? IsApproved { get; set; }
+
     [ForeignKey("ComId")]
     [InverseProperty("Members")]
     public virtual Community Com { get; set; } = null!;
