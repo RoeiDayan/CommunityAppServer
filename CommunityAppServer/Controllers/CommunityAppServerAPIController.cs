@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CommunityAppServer.Models;
 using Microsoft.EntityFrameworkCore;
+using CommunityAppServer.DTO;
 
 namespace CommunityAppServer.Controllers;
 
@@ -160,9 +161,11 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
-            List<Notice> comNotices = context.Notices
-             .Where(n => n.Coms.Any(c => c.ComId == ComId))
-             .ToList();
+            List<DTO.Notice> comNotices = context.Notices
+            .Where(n => n.Coms.Any(c => c.ComId == ComId))
+            .Select(n => new DTO.Notice(n))
+            .ToList();
+
 
             return Ok(comNotices);
         }
@@ -178,8 +181,9 @@ public class CommunityAppServerAPIController : ControllerBase
         try
         {
 
-            List<Report> comReports = context.Reports
+            List<DTO.Report> comReports = context.Reports
             .Where(r => r.ComId == ComId)
+            .Select(r=>new DTO.Report(r))
             .ToList();
 
             return Ok(comReports);
@@ -207,23 +211,80 @@ public class CommunityAppServerAPIController : ControllerBase
 
             if (changes > 0)
             {
-                return Ok(true);  
+                return Ok(true);
             }
             else
             {
-                return Ok(false);  
+                return Ok(false);
             }
         }
         catch (Exception ex)
         {
 
-            return BadRequest($"Error: {ex.Message}");  
+            return BadRequest($"Error: {ex.Message}");
         }
     }
 
+    [HttpPost("GetCommunityId")]
+    public IActionResult GetCommunityId([FromBody] string s)
+    {
+        try
+        {
+            if (s == null)
+            {
+                return BadRequest("Invalid community code.");
+            }
+            bool IsCodeValid = this.context.Communities.Any(c=>c.ComCode == s);
+            if(IsCodeValid)
+            {
+                int ID = this.context.Communities.Where(c => c.ComCode == s).Select(c=>c.ComId).FirstOrDefault();
+                return Ok(ID);
+            }
+            else
+            {
+                return Ok(-1);
+            }
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error: {ex.Message}");  
+        }
+    }
+    [HttpPost("JoinCommunity")]
+    public IActionResult JoinCommunity([FromBody] DTO.Member member)
+    {
+        try
+        {
+            if (member == null)
+            {
+                return BadRequest("Invalid member data.");
+            }
 
+            bool isMember = context.Members.Any(m => m.UserId == member.UserId && m.ComId == member.ComId);
+            if (isMember)
+            {
+                return BadRequest("User is already a member of this community");
+            }
 
+            context.Members.Add(member.GetMember());
+            int changes = context.SaveChanges();
 
+            if (changes > 0)
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return Ok(false);
+            }
+            
+        }
+        catch (Exception ex)
+        {
+
+            return BadRequest($"Error: {ex.Message}");
+        }
+    }
 }
 
 

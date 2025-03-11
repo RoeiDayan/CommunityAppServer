@@ -11,7 +11,7 @@ namespace CommunityAppServer.DTO
         public int UserId { get; set; }
 
         [StringLength(100)]
-        public string? Title { get; set; }
+        public string Title { get; set; }
 
         [Column(TypeName = "text")]
         public string? Text { get; set; }

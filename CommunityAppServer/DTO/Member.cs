@@ -5,7 +5,7 @@ namespace CommunityAppServer.DTO
 {
     public class Member
     {
-        [Key]
+        public Member() { }
         public int ComId { get; set; }
 
         [Key]
@@ -25,6 +25,7 @@ namespace CommunityAppServer.DTO
         public bool? IsManager { get; set; }
 
         public bool? IsProvider { get; set; }
+
         public bool? IsApproved { get; set; }
 
         //[ForeignKey("ComId")]

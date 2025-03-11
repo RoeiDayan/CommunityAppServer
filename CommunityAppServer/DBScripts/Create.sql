@@ -35,7 +35,7 @@ CREATE TABLE Community (
 CREATE TABLE Members (
   ComId INT, 
   UserId INT,
-  [Role] NVARCHAR(50) NOT NULL,
+  [Role] NVARCHAR(50),
   Balance INT DEFAULT 0,
   UnitNum INT DEFAULT 0,
   IsLiable BIT DEFAULT 0, 
@@ -157,6 +157,8 @@ CREATE TABLE NoticeFiles (
 
 -- Insert Initial Data
 INSERT INTO Account (Email, Name, Password) VALUES ('a', 'a', 'a');
+INSERT INTO Account (Email, Name, Password) VALUES ('b', 'b', 'b');
+
 
 INSERT INTO Community (ComName, Body, ComCode, GatePhoneNum) 
 VALUES 
