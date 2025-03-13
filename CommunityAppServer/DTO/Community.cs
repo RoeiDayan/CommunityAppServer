@@ -6,7 +6,7 @@ namespace CommunityAppServer.DTO
 {
     public class Community
     {
-        [Key]
+        public Community() { }
         public int ComId { get; set; }
 
         [StringLength(15)]

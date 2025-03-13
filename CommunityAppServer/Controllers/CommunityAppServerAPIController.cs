@@ -285,6 +285,59 @@ public class CommunityAppServerAPIController : ControllerBase
             return BadRequest($"Error: {ex.Message}");
         }
     }
+
+    [HttpPost("CreateCommunity")]
+    public IActionResult CreateCommunity([FromBody] DTO.MemberCommunity MemCom)
+    {
+        DTO.Community community = MemCom.Community;
+        DTO.Member member = MemCom.Member;
+        try
+        {
+            string s = community.ComCode;
+            if (s == null)
+            {
+                return BadRequest("Invalid community code.");
+            }
+            bool doesCodeExist = this.context.Communities.Any(c => c.ComCode == s);
+            if (doesCodeExist)
+            {
+                return BadRequest("Community Code Exists");
+            }
+            else
+            {
+                Models.Community modelCom = community.GetCommunity();
+                context.Communities.Add(modelCom);
+                IActionResult result = GetCommunityId(s);
+                if (result is OkObjectResult okResult && okResult.Value is int id)
+                {
+                    if (id > 0)
+                    {
+                        member.ComId = id;
+                        Models.Member modelMem = member.GetMember();
+                        this.context.Members.Add(modelMem);
+                        MemberCommunity newMemCom = new MemberCommunity();
+                        newMemCom.Member = member;
+                        newMemCom.Community = community;
+                        return Ok(newMemCom);
+                    }
+                    else
+                    {
+                        return BadRequest("Failed to retrieve community ID.");
+                    }
+                }
+                else
+                {
+                    return BadRequest("Failed to retrieve community ID.");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+
+            return BadRequest($"Error: {ex.Message}");
+        }
+    }
+
 }
 
 

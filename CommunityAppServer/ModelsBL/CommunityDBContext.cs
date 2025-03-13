@@ -11,6 +11,11 @@ public partial class CommunityDBContext : DbContext
         Models.Account? acc = this.Accounts.Where(a => a.Email == email).FirstOrDefault();
         return acc;
     }
+    public Account? GetAccount(int id)
+    {
+        Models.Account? acc = this.Accounts.Where(a => a.Id == id).FirstOrDefault();
+        return acc;
+    }
 
     public List<Member>? GetAccountMembers(int id)
     {
