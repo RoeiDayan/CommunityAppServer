@@ -307,6 +307,7 @@ public class CommunityAppServerAPIController : ControllerBase
             {
                 Models.Community modelCom = community.GetCommunity();
                 context.Communities.Add(modelCom);
+                context.SaveChanges();
                 IActionResult result = GetCommunityId(s);
                 if (result is OkObjectResult okResult && okResult.Value is int id)
                 {
@@ -315,6 +316,7 @@ public class CommunityAppServerAPIController : ControllerBase
                         member.ComId = id;
                         Models.Member modelMem = member.GetMember();
                         this.context.Members.Add(modelMem);
+                        context.SaveChanges();
                         MemberCommunity newMemCom = new MemberCommunity();
                         newMemCom.Member = member;
                         newMemCom.Community = community;
