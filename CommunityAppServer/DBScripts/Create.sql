@@ -194,6 +194,10 @@ VALUES
 
     (1, 'Garbage Collection Delay', 'Garbage collection will be delayed by a day due to a public holiday. Please place bins out on Tuesday instead of Monday.', '2025-03-18 00:00:00', '2025-03-18 23:59:59');
 
+INSERT INTO CommunityNotices([ComId],[NoticeId])
+VALUES
+(1,1), (1,2), (1,3), (1,4);
+
 -- Select Data for Debugging
 SELECT * FROM Account;
 SELECT * FROM Members;

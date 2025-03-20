@@ -59,6 +59,7 @@ namespace CommunityAppServer.DTO
             rep.Status = Status;
             rep.IsAnon = IsAnon;
             rep.CreatedAt = CreatedAt;
+            rep.Title = Title;
             return rep;
         }
         public Report(Models.Report rep)
@@ -71,6 +72,7 @@ namespace CommunityAppServer.DTO
             this.Status = rep.Status;
             this.IsAnon = rep.IsAnon;
             this.CreatedAt = rep.CreatedAt;
+            this.Title = rep.Title;
         }
     }
 }
