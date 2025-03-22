@@ -25,7 +25,7 @@ CREATE TABLE Account (
 CREATE TABLE Community (
   ComId INT IDENTITY(1,1) PRIMARY KEY,
   ComName NVARCHAR(50) NOT NULL,
-  Body NVARCHAR(MAX), 
+  ComDesc NVARCHAR(MAX), 
   ComCode NVARCHAR(50) UNIQUE NOT NULL,
   Picture NVARCHAR(255),
   GatePhoneNum VARCHAR(15),
@@ -160,7 +160,7 @@ INSERT INTO Account (Email, Name, Password) VALUES ('a', 'a', 'a');
 INSERT INTO Account (Email, Name, Password) VALUES ('b', 'b', 'b');
 
 
-INSERT INTO Community (ComName, Body, ComCode, GatePhoneNum) 
+INSERT INTO Community (ComName, ComDesc, ComCode, GatePhoneNum) 
 VALUES 
   ('Kehila', 'Welcome', '123', '0528185522'),
   ('Kehila2', 'Hola! Glad to have you!', '456', '0508182244'),

@@ -16,7 +16,7 @@ public partial class Community
     [StringLength(50)]
     public string ComName { get; set; } = null!;
 
-    public string? Body { get; set; }
+    public string? ComDesc { get; set; }
 
     [StringLength(50)]
     public string ComCode { get; set; } = null!;

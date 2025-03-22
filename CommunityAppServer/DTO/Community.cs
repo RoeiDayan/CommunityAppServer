@@ -13,7 +13,7 @@ namespace CommunityAppServer.DTO
         public string? ComName { get; set; }
 
         [Column(TypeName = "text")]
-        public string? Body { get; set; }
+        public string? ComDesc { get; set; }
 
         [StringLength(20)]
         public string? ComCode { get; set; }
@@ -53,7 +53,7 @@ namespace CommunityAppServer.DTO
             Models.Community com = new Models.Community();
             com.ComId = ComId;
             com.ComName = ComName;
-            com.Body = Body;
+            com.ComDesc = ComDesc;
             com.ComCode = ComCode;
             com.Picture = Picture;
             com.CreatedAt = CreatedAt;
@@ -63,7 +63,7 @@ namespace CommunityAppServer.DTO
         {
             this.ComId = com.ComId;
             this.ComName = com.ComName;
-            this.Body = com.Body;
+            this.ComDesc = com.ComDesc;
             this.ComCode = com.ComCode;
             this.Picture = com.Picture;
             this.CreatedAt = com.CreatedAt;
