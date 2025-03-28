@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CommunityAppServer.Models;
 
 [Table("Account")]
-[Index("Email", Name = "UQ__Account__A9D105343EF549D4", IsUnique = true)]
+[Index("Email", Name = "UQ__Account__A9D1053484472406", IsUnique = true)]
 public partial class Account
 {
     [Key]
@@ -22,6 +22,10 @@ public partial class Account
 
     [StringLength(255)]
     public string Password { get; set; } = null!;
+
+    [StringLength(20)]
+    [Unicode(false)]
+    public string? PhoneNumber { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }

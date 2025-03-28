@@ -20,6 +20,8 @@ namespace CommunityAppServer.DTO
 
         [Column(TypeName = "datetime")]
         public DateTime? CreatedAt { get; set; }
+        public string? PhoneNumber { get; set; }
+
 
         public Account() 
         {
@@ -34,6 +36,7 @@ namespace CommunityAppServer.DTO
             acc.Name  = this.Name;
             acc.Password = this.Password;
             acc.CreatedAt = this.CreatedAt;
+            acc.PhoneNumber = this.PhoneNumber;
             return acc;
         }
         public Account(Models.Account acc)
@@ -43,6 +46,7 @@ namespace CommunityAppServer.DTO
             this.Name = acc.Name;
             this.Password = acc.Password;
             this.CreatedAt = acc.CreatedAt;
+            this.PhoneNumber = acc.PhoneNumber;
         }
     }
 }

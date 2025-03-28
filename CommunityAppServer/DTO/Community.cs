@@ -57,6 +57,7 @@ namespace CommunityAppServer.DTO
             com.ComCode = ComCode;
             com.Picture = Picture;
             com.CreatedAt = CreatedAt;
+            com.GatePhoneNum = GatePhoneNum;
             return com;
         }
         public Community(Models.Community com)
@@ -67,6 +68,7 @@ namespace CommunityAppServer.DTO
             this.ComCode = com.ComCode;
             this.Picture = com.Picture;
             this.CreatedAt = com.CreatedAt;
+            this.GatePhoneNum= com.GatePhoneNum;
         }
     }
 }
