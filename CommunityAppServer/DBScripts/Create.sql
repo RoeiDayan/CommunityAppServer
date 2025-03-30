@@ -157,8 +157,8 @@ CREATE TABLE NoticeFiles (
 );
 
 -- Insert Initial Data
-INSERT INTO Account (Email, Name, Password) VALUES ('a', 'a', 'a');
-INSERT INTO Account (Email, Name, Password) VALUES ('b', 'b', 'b');
+INSERT INTO Account (Email, Name, Password, PhoneNumber) VALUES ('a', 'a', 'a', '0528182233');
+INSERT INTO Account (Email, Name, Password, PhoneNumber) VALUES ('b', 'b', 'b', '0501418822');
 
 
 INSERT INTO Community (ComName, ComDesc, ComCode, GatePhoneNum) 
