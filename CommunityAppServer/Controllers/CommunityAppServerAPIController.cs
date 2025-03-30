@@ -340,6 +340,25 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
+    [HttpGet("GetCommunityMembers")]
+    public IActionResult GetCommunityMembers(int ComId)
+    {
+        try
+        {
+
+            List<DTO.Member> comMembers = context.Members
+            .Where(m => m.ComId == ComId)
+            .Select(m => new DTO.Member(m))
+            .ToList();
+
+            return Ok(comMembers);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
 }
 
 
