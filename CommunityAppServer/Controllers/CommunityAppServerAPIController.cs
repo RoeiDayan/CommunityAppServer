@@ -314,6 +314,7 @@ public class CommunityAppServerAPIController : ControllerBase
                     if (id > 0)
                     {
                         member.ComId = id;
+                        community.ComId = id;
                         Models.Member modelMem = member.GetMember();
                         this.context.Members.Add(modelMem);
                         context.SaveChanges();
