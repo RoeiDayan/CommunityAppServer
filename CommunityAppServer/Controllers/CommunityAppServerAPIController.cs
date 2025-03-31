@@ -340,24 +340,34 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
-    [HttpGet("GetCommunityMembers")]
-    public IActionResult GetCommunityMembers(int ComId)
+    
+    [HttpGet("GetCommunityMemberAccounts")]
+    public IActionResult GetCommunityMemberAccounts(int ComId)
     {
         try
         {
+            List<DTO.MemberAccount> comMemberAccounts = context.Members
+                .Where(m => m.ComId == ComId)
+                .Join(
+                    context.Accounts,
+                    m => m.UserId,
+                    a => a.Id,
+                    (m, a) => new DTO.MemberAccount
+                    {
+                        Member = new DTO.Member(m),
+                        Account = new DTO.Account(a)
+                    }
+                )
+                .ToList();
 
-            List<DTO.Member> comMembers = context.Members
-            .Where(m => m.ComId == ComId)
-            .Select(m => new DTO.Member(m))
-            .ToList();
-
-            return Ok(comMembers);
+            return Ok(comMemberAccounts);
         }
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
     }
+
 
 }
 

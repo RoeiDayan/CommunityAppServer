@@ -171,7 +171,8 @@ INSERT INTO Members (UserId, ComId, [Role], Balance, UnitNum, IsLiable, IsReside
 VALUES 
   (1, 1, 'Manager', 100, 1, 1, 1, 1, 1),
   (1, 2, 'Resident', 50, 7, 1, 1, 0, 0),
-  (1, 3, 'Resident', 0, 13, 0, 1, 0, 0);
+  (1, 3, 'Resident', 0, 13, 0, 1, 0, 0),
+  (2, 1, 'Resident', 0, 13, 0, 1, 0, 0);
 
 INSERT INTO Priority (PriorityNum, Priority) VALUES 
 (0,'Low'),
