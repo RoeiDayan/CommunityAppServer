@@ -207,7 +207,6 @@ SELECT * FROM Community;
 SELECT * FROM Report;
 SELECT * FROM Notices;
 SELECT * FROM CommunityNotices;
-SELECT * FROM Members;
 
 CREATE LOGIN [AdminLogin] WITH PASSWORD = 'ComPass';
 Go
