@@ -187,7 +187,9 @@ VALUES
     (1, 1, 'Beware of power outage between 8 AM and 2 PM', 'During Monday, March 11th, there will be no power due to maintenance.', '2025-03-11 08:00:00', '2025-03-11 14:00:00'),
     (1, 1, 'Community Meeting Reminder', 'A community meeting will be held at the main hall on March 15th at 6 PM.', '2025-03-15 18:00:00', '2025-03-15 20:00:00'),
     (1, 1, 'Water Supply Interruption', 'Water supply will be temporarily unavailable on March 20th from 10 AM to 4 PM due to pipeline maintenance.', '2025-03-20 10:00:00', '2025-03-20 16:00:00'),
-    (1, 1, 'Garbage Collection Delay', 'Garbage collection will be delayed by a day due to a public holiday. Please place bins out on Tuesday instead of Monday.', '2025-03-18 00:00:00', '2025-03-18 23:59:59');
+    (1, 1, 'Garbage Collection Delay', 'Garbage collection will be delayed by a day due to a public holiday. Please place bins out on Tuesday instead of Monday.', '2025-03-18 00:00:00', '2025-03-18 23:59:59'),
+    (1, 1, 'Nothing', 'Blank.', NULL, NULL);
+
 
 -- Select Data for Debugging
 SELECT * FROM Account;
