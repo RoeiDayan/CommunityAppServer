@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CommunityAppServer.Models;
 
 [Table("Community")]
-[Index("ComCode", Name = "UQ__Communit__5BCA59DCF39B2AD1", IsUnique = true)]
+[Index("ComCode", Name = "UQ__Communit__5BCA59DC1E76CA27", IsUnique = true)]
 public partial class Community
 {
     [Key]
@@ -35,6 +35,9 @@ public partial class Community
     public virtual ICollection<Member> Members { get; set; } = new List<Member>();
 
     [InverseProperty("Com")]
+    public virtual ICollection<Notice> Notices { get; set; } = new List<Notice>();
+
+    [InverseProperty("Com")]
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     [InverseProperty("Com")]
@@ -45,8 +48,4 @@ public partial class Community
 
     [InverseProperty("Com")]
     public virtual ICollection<TenantRoom> TenantRooms { get; set; } = new List<TenantRoom>();
-
-    [ForeignKey("ComId")]
-    [InverseProperty("Coms")]
-    public virtual ICollection<Notice> Notices { get; set; } = new List<Notice>();
 }

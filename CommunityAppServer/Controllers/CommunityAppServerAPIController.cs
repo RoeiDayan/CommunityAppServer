@@ -162,10 +162,9 @@ public class CommunityAppServerAPIController : ControllerBase
         try
         {
             List<DTO.Notice> comNotices = context.Notices
-            .Where(n => n.Coms.Any(c => c.ComId == ComId))
-            .Select(n => new DTO.Notice(n))
-            .ToList();
-
+                .Where(n => n.ComId == ComId) // Directly filter by ComId
+                .Select(n => new DTO.Notice(n))
+                .ToList();
 
             return Ok(comNotices);
         }
@@ -206,6 +205,37 @@ public class CommunityAppServerAPIController : ControllerBase
             }
 
             context.Reports.Add(modelsReport);
+
+            int changes = context.SaveChanges();
+
+            if (changes > 0)
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return Ok(false);
+            }
+        }
+        catch (Exception ex)
+        {
+
+            return BadRequest($"Error: {ex.Message}");
+        }
+    }
+
+    [HttpPost("CreateNotice")]
+    public IActionResult CreateNotice([FromBody] DTO.Notice notice)
+    {
+        try
+        {
+            Models.Notice modelsNotice = notice.GetNotice();
+            if (modelsNotice == null)
+            {
+                return BadRequest("Invalid notice data.");
+            }
+
+            context.Notices.Add(modelsNotice);
 
             int changes = context.SaveChanges();
 

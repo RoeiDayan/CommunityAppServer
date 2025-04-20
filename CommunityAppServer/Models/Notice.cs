@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommunityAppServer.Models;
 
+[Index("ComId", Name = "IX_Notices_ComId")]
 [Index("EndTime", Name = "IX_Notices_EndTime")]
 [Index("StartTime", Name = "IX_Notices_StartTime")]
 [Index("UserId", Name = "IX_Notices_UserId")]
@@ -16,10 +17,12 @@ public partial class Notice
 
     public int UserId { get; set; }
 
+    public int ComId { get; set; }
+
     [StringLength(100)]
     public string Title { get; set; } = null!;
 
-    public string? Text { get; set; }
+    public string? NoticeDesc { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? StartTime { get; set; }
@@ -30,14 +33,14 @@ public partial class Notice
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }
 
+    [ForeignKey("ComId")]
+    [InverseProperty("Notices")]
+    public virtual Community Com { get; set; } = null!;
+
     [InverseProperty("Notice")]
     public virtual ICollection<NoticeFile> NoticeFiles { get; set; } = new List<NoticeFile>();
 
     [ForeignKey("UserId")]
     [InverseProperty("Notices")]
     public virtual Account User { get; set; } = null!;
-
-    [ForeignKey("NoticeId")]
-    [InverseProperty("Notices")]
-    public virtual ICollection<Community> Coms { get; set; } = new List<Community>();
 }
