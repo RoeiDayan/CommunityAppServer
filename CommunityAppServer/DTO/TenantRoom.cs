@@ -27,6 +27,8 @@ namespace CommunityAppServer.DTO
         //[ForeignKey("KeyHolderId")]
         //[InverseProperty("TenantRooms")]
         //public virtual Account KeyHolder { get; set; } = null!;
+
+        public TenantRoom() { }
         public Models.TenantRoom GetTenantRoom()
         {
             Models.TenantRoom gtr = new Models.TenantRoom();

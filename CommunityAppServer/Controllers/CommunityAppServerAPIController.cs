@@ -398,7 +398,68 @@ public class CommunityAppServerAPIController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+    [HttpGet("GetCommunityTenantRoom")]
+    public IActionResult GetCommunityTenantRoom(int comId)
+    {
+        try
+        {
+            var tenantRoom = context.TenantRooms
+                .FirstOrDefault(tr => tr.ComId == comId);
 
+            if (tenantRoom == null)
+                return NotFound($"No tenant room found for community ID {comId}");
+
+            return Ok(new DTO.TenantRoom(tenantRoom));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("GetApprovedRoomRequests")]
+    public IActionResult GetApprovedRoomRequests(int ComId)
+    {
+        try
+        {
+            List<DTO.RoomRequest> approvedRequests = context.RoomRequests
+                .Where(rr => rr.ComId == ComId && rr.IsApproved == true)
+                .Select(rr => new DTO.RoomRequest(rr))
+                .ToList();
+
+            return Ok(approvedRequests);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    [HttpGet("GetMemberAccount")]
+    public IActionResult GetMemberAccount(int UserId, int ComId)
+    {
+        try
+        {
+            var member = context.Members
+                .FirstOrDefault(m => m.UserId == UserId && m.ComId == ComId);
+
+            if (member == null)
+                return NotFound($"No member found with User ID {UserId} in Community {ComId}");
+
+            var account = context.Accounts.FirstOrDefault(a => a.Id == UserId);
+            if (account == null)
+                return NotFound($"No account found with ID {UserId}");
+
+            return Ok(new DTO.MemberAccount
+            {
+                Member = new DTO.Member(member),
+                Account = new DTO.Account(account)
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
 }
 

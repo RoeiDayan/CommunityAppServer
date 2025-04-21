@@ -13,7 +13,7 @@ public partial class TenantRoom
     [Key]
     public int ComId { get; set; }
 
-    [StringLength(10)]
+    [StringLength(20)]
     public string? Status { get; set; }
 
     [Key]

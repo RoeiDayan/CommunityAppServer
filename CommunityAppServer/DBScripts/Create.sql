@@ -124,7 +124,7 @@ CREATE TABLE RoomRequests (
 
 CREATE TABLE TenantRoom (
   ComId INT,
-  Status NVARCHAR(10),
+  Status NVARCHAR(20),
   KeyHolderId INT,
   SessionStart DATETIME,
   SessionEnd DATETIME,
@@ -189,6 +189,18 @@ VALUES
     (1, 1, 'Water Supply Interruption', 'Water supply will be temporarily unavailable on March 20th from 10 AM to 4 PM due to pipeline maintenance.', '2025-03-20 10:00:00', '2025-03-20 16:00:00'),
     (1, 1, 'Garbage Collection Delay', 'Garbage collection will be delayed by a day due to a public holiday. Please place bins out on Tuesday instead of Monday.', '2025-03-18 00:00:00', '2025-03-18 23:59:59'),
     (1, 1, 'Nothing', 'Blank.', NULL, NULL);
+
+-- Insert into TenantRoom
+INSERT INTO TenantRoom (ComId, Status, KeyHolderId, SessionStart, SessionEnd)
+VALUES 
+(1, 'Occupied', 1, '2025-04-21 08:00:00', '2025-04-21 20:00:00');
+
+-- Insert into RoomRequests
+INSERT INTO RoomRequests (UserId, ComId, StartTime, EndTime, Text, IsApproved)
+VALUES 
+(1, 1, '2025-04-22 09:00:00', '2025-04-22 11:00:00', 'Requesting room for study group', 1),
+(1, 1, '2025-04-23 14:00:00', '2025-04-23 16:00:00', 'Need the room for yoga class', 0),
+(1, 1, '2025-04-24 18:00:00', '2025-04-24 20:00:00', 'Game night session', 1);
 
 
 -- Select Data for Debugging
