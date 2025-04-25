@@ -48,6 +48,7 @@ namespace CommunityAppServer.DTO
             mem.IsResident = IsResident;
             mem.IsManager = IsManager;
             mem.IsProvider = IsProvider;
+            mem.IsApproved = IsApproved;
             return mem;
         }
         public Member(Models.Member mem)
@@ -61,6 +62,7 @@ namespace CommunityAppServer.DTO
             this.IsResident= mem.IsResident;
             this.IsManager = mem.IsManager;
             this.IsProvider = mem.IsProvider;
+            this.IsApproved= mem.IsApproved;
         }
     }
 }

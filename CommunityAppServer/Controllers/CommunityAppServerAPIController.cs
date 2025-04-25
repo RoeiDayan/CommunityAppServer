@@ -371,14 +371,14 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
-    
-    [HttpGet("GetCommunityMemberAccounts")]
-    public IActionResult GetCommunityMemberAccounts(int ComId)
+
+    [HttpGet("GetApprovedCommunityMemberAccounts")]
+    public IActionResult GetApprovedCommunityMemberAccounts(int ComId)
     {
         try
         {
             List<DTO.MemberAccount> comMemberAccounts = context.Members
-                .Where(m => m.ComId == ComId)
+                .Where(m => m.ComId == ComId && m.IsApproved == true) // Only approved members
                 .Join(
                     context.Accounts,
                     m => m.UserId,
@@ -398,6 +398,7 @@ public class CommunityAppServerAPIController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
     [HttpGet("GetCommunityTenantRoom")]
     public IActionResult GetCommunityTenantRoom(int comId)
     {
@@ -460,6 +461,66 @@ public class CommunityAppServerAPIController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpGet("GetUnapprovedCommunityMemberAccounts")]
+    public IActionResult GetUnapprovedCommunityMemberAccounts(int ComId)
+    {
+        try
+        {
+            List<DTO.MemberAccount> comMemberAccounts = context.Members
+                .Where(m => m.ComId == ComId && m.IsApproved == false) 
+                .Join(
+                    context.Accounts,
+                    m => m.UserId,
+                    a => a.Id,
+                    (m, a) => new DTO.MemberAccount
+                    {
+                        Member = new DTO.Member(m),
+                        Account = new DTO.Account(a)
+                    }
+                )
+                .ToList();
+
+            return Ok(comMemberAccounts);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("UpdateMember")]
+    public IActionResult UpdateMember([FromBody] DTO.Member member)
+    {
+        var mem = context.Members
+            .FirstOrDefault(m => m.ComId == member.ComId && m.UserId == member.UserId);
+
+        if (mem == null)
+        {
+            return BadRequest("No member found");
+        }
+
+        // Update fields
+        mem.Role = member.Role;
+        mem.Balance = member.Balance;
+        mem.UnitNum = member.UnitNum;
+        mem.IsLiable = member.IsLiable;
+        mem.IsResident = member.IsResident;
+        mem.IsManager = member.IsManager;
+        mem.IsProvider = member.IsProvider;
+        mem.IsApproved = member.IsApproved;
+
+        try
+        {
+            context.SaveChanges();
+            return Ok("Member updated successfully");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error updating member: {ex.Message}");
+        }
+    }
+    
 
 }
 
