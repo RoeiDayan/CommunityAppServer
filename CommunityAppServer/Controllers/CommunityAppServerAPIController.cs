@@ -462,13 +462,13 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
-    [HttpGet("GetUnapprovedCommunityMemberAccounts")]
-    public IActionResult GetUnapprovedCommunityMemberAccounts(int ComId)
+    [HttpGet("GetSelectCommunityMemberAccounts")]
+    public IActionResult GetSelectCommunityMemberAccounts(int ComId, bool ApprovedStat)
     {
         try
         {
             List<DTO.MemberAccount> comMemberAccounts = context.Members
-                .Where(m => m.ComId == ComId && m.IsApproved == false) 
+                .Where(m => m.ComId == ComId && m.IsApproved == ApprovedStat) 
                 .Join(
                     context.Accounts,
                     m => m.UserId,
@@ -520,7 +520,30 @@ public class CommunityAppServerAPIController : ControllerBase
             return StatusCode(500, $"Error updating member: {ex.Message}");
         }
     }
-    
+    [HttpDelete("RemoveMember")]
+    public IActionResult RemoveMember(int ComId, int UserId)
+    {
+        try
+        {
+            var member = context.Members
+                .FirstOrDefault(m => m.ComId == ComId && m.UserId == UserId);
+
+            if (member == null)
+            {
+                return NotFound("Member not found");
+            }
+
+            // Remove the member from the community
+            context.Members.Remove(member);
+            context.SaveChanges();
+
+            return Ok("Member removed successfully");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error removing member: {ex.Message}");
+        }
+    }
 
 }
 

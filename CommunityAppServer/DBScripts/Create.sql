@@ -152,8 +152,19 @@ CREATE TABLE NoticeFiles (
 );
 
 -- Insert Initial Data
-INSERT INTO Account (Email, Name, Password, PhoneNumber) VALUES ('a', 'a', 'a', '0528182233');
-INSERT INTO Account (Email, Name, Password, PhoneNumber) VALUES ('b', 'b', 'b', '0501418822');
+INSERT INTO Account (Email, Name, Password, PhoneNumber) VALUES 
+('a', 'a', 'a', '0528182233'),
+('b', 'b', 'b', '0501418822'),
+('c@example.com', 'Charlie', 'pass123', '0500000003'),
+('d@example.com', 'Dana', 'pass123', '0500000004'),
+('e@example.com', 'Eli', 'pass123', '0500000005'),
+('f@example.com', 'Farah', 'pass123', '0500000006'),
+('g@example.com', 'Gil', 'pass123', '0500000007'),
+('h@example.com', 'Hila', 'pass123', '0500000008'),
+('i@example.com', 'Ilan', 'pass123', '0500000009'),
+('j@example.com', 'Julia', 'pass123', '0500000010'),
+('k@example.com', 'Kfir', 'pass123', '0500000011'),
+('l@example.com', 'Lior', 'pass123', '0500000012');
 
 
 INSERT INTO Community (ComName, ComDesc, ComCode, GatePhoneNum) 
@@ -162,12 +173,22 @@ VALUES
   ('Kehila2', 'Hola! Glad to have you!', '456', '0508182244'),
   ('Kehila3', 'Shalom! Excited to have you back', '789', '0501812244');
 
-INSERT INTO Members (UserId, ComId, [Role], Balance, UnitNum, IsLiable, IsResident, IsManager, IsProvider) 
+INSERT INTO Members (UserId, ComId, [Role], Balance, UnitNum, IsLiable, IsResident, IsManager, IsProvider, IsApproved) 
 VALUES 
-  (1, 1, 'Manager', 100, 1, 1, 1, 1, 1),
-  (1, 2, 'Resident', 50, 7, 1, 1, 0, 0),
-  (1, 3, 'Resident', 0, 13, 0, 1, 0, 0),
-  (2, 1, 'Resident', 0, 13, 0, 1, 0, 0);
+  (1, 1, 'Manager', 100, 1, 1, 1, 1, 0, 1),
+  (1, 2, 'Resident', 50, 7, 1, 1, 0, 0, 0),
+  (1, 3, 'Resident', 0, 13, 0, 1, 0, 0, 0),
+  (2, 1, 'Resident', 0, 13, 0, 1, 0, 0, 0),
+  (3, 1, 'Resident', 20, 5, 0, 1, 0, 0, 0),
+  (4, 1, 'Liable, Resident', 150, 6, 1, 1, 0, 0, 0),
+  (5, 1, 'Resident', -10, 8, 0, 1, 0, 0, 1),
+  (6, 1, 'Provider', 0, NULL, 0, 0, 0, 1, 0),
+  (7, 1, 'Resident, Provider', 30, 9, 0, 1, 0, 1, 1),
+  (8, 1, 'Manager, Liable, Resident', 300, 2, 1, 1, 1, 0, 0),
+  (9, 1, 'Resident', 50, 10, 0, 1, 0, 0, 1),
+  (10, 1, 'Liable, Resident', 80, 3, 1, 1, 0, 0, 1),
+  (11, 1, 'Resident', 0, 11, 0, 1, 0, 0, 1),
+  (12, 1, 'Resident, Provider', 70, 12, 0, 1, 0, 1, 1);
 
 INSERT INTO Priority (PriorityNum, Priority) VALUES 
 (0,'Low'),
