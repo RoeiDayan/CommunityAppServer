@@ -6,7 +6,6 @@ namespace CommunityAppServer.DTO
 {
     public class Payment
     {
-        [Key]
         public int PaymentId { get; set; }
 
         public int ComId { get; set; }
@@ -15,21 +14,16 @@ namespace CommunityAppServer.DTO
 
         public int Amount { get; set; }
 
+        public string? Details { get; set; }
+
         public bool? MarkedPayed { get; set; }
 
         public bool? WasPayed { get; set; }
 
-        public DateOnly PayFrom { get; set; }
+        public DateOnly? PayFrom { get; set; }
 
-        public DateOnly PayUntil { get; set; }
+        public DateOnly? PayUntil { get; set; }
 
-        //[ForeignKey("ComId")]
-        //[InverseProperty("Payments")]
-        //public virtual Community? Com { get; set; }
-
-        //[ForeignKey("UserId")]
-        //[InverseProperty("Payments")]
-        //public virtual Account? User { get; set; }
         public Models.Payment GetPayment()
         {
             Models.Payment pay = new Models.Payment();
@@ -37,6 +31,7 @@ namespace CommunityAppServer.DTO
             pay.ComId = ComId;
             pay.UserId = UserId;
             pay.Amount = Amount;
+            pay.Details = Details;
             pay.MarkedPayed = MarkedPayed;
             pay.WasPayed = WasPayed;
             pay.PayFrom = PayFrom;
@@ -49,6 +44,7 @@ namespace CommunityAppServer.DTO
             this.ComId = pay.ComId;
             this.UserId = pay.UserId;
             this.Amount = pay.Amount;
+            this.Details = pay.Details;
             this.MarkedPayed= pay.MarkedPayed;
             this.WasPayed= pay.WasPayed;
             this.PayFrom = pay.PayFrom;

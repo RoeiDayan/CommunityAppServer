@@ -17,13 +17,16 @@ public partial class Payment
 
     public int Amount { get; set; }
 
+    [StringLength(200)]
+    public string? Details { get; set; }
+
     public bool? MarkedPayed { get; set; }
 
     public bool? WasPayed { get; set; }
 
-    public DateOnly PayFrom { get; set; }
+    public DateOnly? PayFrom { get; set; }
 
-    public DateOnly PayUntil { get; set; }
+    public DateOnly? PayUntil { get; set; }
 
     [ForeignKey("ComId")]
     [InverseProperty("Payments")]

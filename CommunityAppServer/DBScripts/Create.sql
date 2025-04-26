@@ -101,10 +101,11 @@ CREATE TABLE Payments (
   ComId INT NOT NULL,
   UserId INT NOT NULL,
   Amount INT NOT NULL,
+  Details NVARCHAR(200),
   MarkedPayed BIT DEFAULT 0,
   WasPayed BIT DEFAULT 0,
-  PayFrom DATE NOT NULL,
-  PayUntil DATE NOT NULL,
+  PayFrom DATE,
+  PayUntil DATE,
   FOREIGN KEY (ComId) REFERENCES Community(ComId) ON DELETE CASCADE,
   FOREIGN KEY (UserId) REFERENCES Account(ID) ON DELETE CASCADE
 );
