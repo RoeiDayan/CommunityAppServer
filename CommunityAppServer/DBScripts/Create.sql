@@ -110,6 +110,18 @@ CREATE TABLE Payments (
   FOREIGN KEY (UserId) REFERENCES Account(ID) ON DELETE CASCADE
 );
 
+CREATE TABLE Expenses (
+    ExpenseId INT PRIMARY KEY IDENTITY(1,1),
+    ComId INT NOT NULL,
+    Title NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(MAX) NULL, 
+    Amount DECIMAL(10,2) NOT NULL, 
+    ExpenseDate DATE NOT NULL,
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE(), 
+    FOREIGN KEY (ComId) REFERENCES Community(ComId)
+);
+
+
 CREATE TABLE RoomRequests (
   RequestId INT IDENTITY(1,1) PRIMARY KEY,
   UserId INT NOT NULL,

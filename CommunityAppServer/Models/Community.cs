@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CommunityAppServer.Models;
 
 [Table("Community")]
-[Index("ComCode", Name = "UQ__Communit__5BCA59DCC0FD68F8", IsUnique = true)]
+[Index("ComCode", Name = "UQ__Communit__5BCA59DC05F61872", IsUnique = true)]
 public partial class Community
 {
     [Key]
@@ -30,6 +30,9 @@ public partial class Community
 
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }
+
+    [InverseProperty("Com")]
+    public virtual ICollection<Expense> Expenses { get; set; } = new List<Expense>();
 
     [InverseProperty("Com")]
     public virtual ICollection<Member> Members { get; set; } = new List<Member>();
