@@ -399,24 +399,24 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
-    [HttpGet("GetCommunityTenantRoom")]
-    public IActionResult GetCommunityTenantRoom(int comId)
-    {
-        try
-        {
-            var tenantRoom = context.TenantRooms
-                .FirstOrDefault(tr => tr.ComId == comId);
+    //[HttpGet("GetCommunityTenantRoom")]
+    //public IActionResult GetCommunityTenantRoom(int comId)
+    //{
+    //    try
+    //    {
+    //        var tenantRoom = context.TenantRooms
+    //            .FirstOrDefault(tr => tr.ComId == comId);
 
-            if (tenantRoom == null)
-                return NotFound($"No tenant room found for community ID {comId}");
+    //        if (tenantRoom == null)
+    //            return NotFound($"No tenant room found for community ID {comId}");
 
-            return Ok(new DTO.TenantRoom(tenantRoom));
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
+    //        return Ok(new DTO.TenantRoom(tenantRoom));
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return BadRequest(ex.Message);
+    //    }
+    //}
 
     [HttpGet("GetApprovedRoomRequests")]
     public IActionResult GetApprovedRoomRequests(int ComId)

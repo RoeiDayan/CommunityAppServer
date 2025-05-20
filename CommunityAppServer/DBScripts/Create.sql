@@ -231,10 +231,10 @@ VALUES
 
 -- Insert into RoomRequests
 INSERT INTO RoomRequests (UserId, ComId, StartTime, EndTime, Text, IsApproved)
-VALUES 
-(1, 1, '2025-04-22 09:00:00', '2025-04-22 11:00:00', 'Requesting room for study group', 1),
-(1, 1, '2025-04-23 14:00:00', '2025-04-23 16:00:00', 'Need the room for yoga class', 0),
-(1, 1, '2025-04-24 18:00:00', '2025-04-24 20:00:00', 'Game night session', 1);
+VALUES
+    (1, 1, '2025-05-20 22:00:00', '2025-05-21 00:00:00', 'Current request for testing', 1), -- Starts 15 minutes before now, ends 2 hours after.
+    (1, 1, '2025-05-22 10:00:00', '2025-05-22 12:00:00', 'Request for study group', 1),       -- Tomorrow
+    (1, 1, '2025-05-23 18:00:00', '2025-05-23 20:00:00', 'Game night session', 1);       -- The day after tomorrow
 
 
 -- Select Data for Debugging
@@ -244,6 +244,7 @@ SELECT * FROM Community;
 SELECT * FROM Report;
 SELECT * FROM Notices;
 SELECT * FROM CommunityNotices;
+SELECT * FROM RoomRequests;
 
 CREATE LOGIN [AdminLogin] WITH PASSWORD = 'ComPass';
 Go
