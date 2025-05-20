@@ -5,7 +5,7 @@ namespace CommunityAppServer.DTO
 {
     public class RoomRequest
     {
-        [Key]
+        public RoomRequest() { }
         public int RequestId { get; set; }
 
         public int UserId { get; set; }

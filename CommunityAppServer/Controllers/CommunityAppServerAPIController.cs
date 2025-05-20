@@ -182,7 +182,7 @@ public class CommunityAppServerAPIController : ControllerBase
 
             List<DTO.Report> comReports = context.Reports
             .Where(r => r.ComId == ComId)
-            .Select(r=>new DTO.Report(r))
+            .Select(r => new DTO.Report(r))
             .ToList();
 
             return Ok(comReports);
@@ -264,10 +264,10 @@ public class CommunityAppServerAPIController : ControllerBase
             {
                 return BadRequest("Invalid community code.");
             }
-            bool IsCodeValid = this.context.Communities.Any(c=>c.ComCode == s);
-            if(IsCodeValid)
+            bool IsCodeValid = this.context.Communities.Any(c => c.ComCode == s);
+            if (IsCodeValid)
             {
-                int ID = this.context.Communities.Where(c => c.ComCode == s).Select(c=>c.ComId).FirstOrDefault();
+                int ID = this.context.Communities.Where(c => c.ComCode == s).Select(c => c.ComId).FirstOrDefault();
                 return Ok(ID);
             }
             else
@@ -277,7 +277,7 @@ public class CommunityAppServerAPIController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error: {ex.Message}");  
+            return BadRequest($"Error: {ex.Message}");
         }
     }
     [HttpPost("JoinCommunity")]
@@ -307,7 +307,7 @@ public class CommunityAppServerAPIController : ControllerBase
             {
                 return Ok(false);
             }
-            
+
         }
         catch (Exception ex)
         {
@@ -468,7 +468,7 @@ public class CommunityAppServerAPIController : ControllerBase
         try
         {
             List<DTO.MemberAccount> comMemberAccounts = context.Members
-                .Where(m => m.ComId == ComId && m.IsApproved == ApprovedStat) 
+                .Where(m => m.ComId == ComId && m.IsApproved == ApprovedStat)
                 .Join(
                     context.Accounts,
                     m => m.UserId,
@@ -542,6 +542,26 @@ public class CommunityAppServerAPIController : ControllerBase
         catch (Exception ex)
         {
             return StatusCode(500, $"Error removing member: {ex.Message}");
+        }
+    }
+
+    [HttpPost("CreateRoomRequest")]
+    public IActionResult CreateRoomRequest([FromBody] DTO.RoomRequest req)
+    {
+        try
+        {
+            Models.RoomRequest modelReq = req.GetRoomRequest(); // Assuming you have a converter method
+            if (modelReq == null)
+                return BadRequest("Invalid data.");
+
+            context.RoomRequests.Add(modelReq);
+            int changes = context.SaveChanges();
+
+            return Ok(changes > 0);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error: {ex.Message}");
         }
     }
 
