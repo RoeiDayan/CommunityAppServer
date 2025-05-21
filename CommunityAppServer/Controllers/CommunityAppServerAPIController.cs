@@ -418,23 +418,8 @@ public class CommunityAppServerAPIController : ControllerBase
     //    }
     //}
 
-    [HttpGet("GetApprovedRoomRequests")]
-    public IActionResult GetApprovedRoomRequests(int ComId)
-    {
-        try
-        {
-            List<DTO.RoomRequest> approvedRequests = context.RoomRequests
-                .Where(rr => rr.ComId == ComId && rr.IsApproved == true)
-                .Select(rr => new DTO.RoomRequest(rr))
-                .ToList();
-
-            return Ok(approvedRequests);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
+    
+    
     [HttpGet("GetMemberAccount")]
     public IActionResult GetMemberAccount(int UserId, int ComId)
     {
@@ -565,6 +550,77 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
+
+    [HttpGet("GetSelectRoomRequests")]
+    public IActionResult GetSelectRoomRequests(int ComId, bool IsApproved)
+    {
+        try
+        {
+            List<DTO.RoomRequest> Requests = context.RoomRequests
+                .Where(rr => rr.ComId == ComId && rr.IsApproved == IsApproved)
+                .Select(rr => new DTO.RoomRequest(rr))
+                .ToList();
+
+            return Ok(Requests);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("UpdateRoomRequest")]
+    public IActionResult UpdateRoomRequest([FromBody] DTO.RoomRequest roomRequest)
+    {
+        try
+        {
+            // Find the existing room request
+            Models.RoomRequest? existingRequest = context.RoomRequests.FirstOrDefault(rr => rr.RequestId == roomRequest.RequestId);
+
+            if (existingRequest == null)
+            {
+                return NotFound("Room request not found");
+            }
+
+            // Update properties
+            existingRequest.IsApproved = roomRequest.IsApproved;
+            existingRequest.Text = roomRequest.Text;
+            existingRequest.StartTime = roomRequest.StartTime;
+            existingRequest.EndTime = roomRequest.EndTime;
+
+            // Save changes
+            context.SaveChanges();
+            return Ok(true);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("DeleteRoomRequest")]
+    public IActionResult DeleteRoomRequest(int id)
+    {
+        try
+        {
+            // Find the room request
+            Models.RoomRequest? roomRequest = context.RoomRequests.FirstOrDefault(rr => rr.RequestId == id);
+
+            if (roomRequest == null)
+            {
+                return NotFound("Room request not found");
+            }
+
+            // Remove the room request
+            context.RoomRequests.Remove(roomRequest);
+            context.SaveChanges();
+            return Ok(true);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }
 
 
