@@ -621,6 +621,31 @@ public class CommunityAppServerAPIController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpDelete("DeletePastRoomRequests")]
+    public IActionResult DeletePastRoomRequests(int comId)
+    {
+        try
+        {
+            DateTime now = DateTime.UtcNow;
+
+            var pastRequests = context.RoomRequests
+                .Where(r => r.ComId == comId && r.EndTime < now)
+                .ToList();
+
+            if (pastRequests.Count == 0)
+                return Ok(false); // nothing to delete
+
+            context.RoomRequests.RemoveRange(pastRequests);
+            context.SaveChanges();
+            return Ok(true);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
 }
 
 

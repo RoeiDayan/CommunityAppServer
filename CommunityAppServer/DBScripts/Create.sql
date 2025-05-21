@@ -232,9 +232,11 @@ VALUES
 -- Insert into RoomRequests
 INSERT INTO RoomRequests (UserId, ComId, StartTime, EndTime, Text, IsApproved)
 VALUES
-    (1, 1, '2025-05-20 22:00:00', '2025-05-21 00:00:00', 'Current request for testing', 1), -- Starts 15 minutes before now, ends 2 hours after.
-    (1, 1, '2025-05-22 10:00:00', '2025-05-22 12:00:00', 'Request for study group', 1),       -- Tomorrow
-    (1, 1, '2025-05-23 18:00:00', '2025-05-23 20:00:00', 'Game night session', 1);       -- The day after tomorrow
+    (1, 1, '2025-05-20 22:00:00', '2025-05-21 00:00:00', 'a', 1), -- Starts 15 minutes before now, ends 2 hours after.
+    (1, 1, '2025-05-22 10:00:00', '2025-05-22 12:00:00', 'b', 1),       -- Tomorrow
+    (1, 1, '2025-05-23 18:00:00', '2025-05-23 20:00:00', 'c', 1),      -- The day after tomorrow
+    (1, 1, '2025-05-24 18:00:00', '2025-05-25 20:00:00', 'd', 0);       -- The day after tomorrow
+
 
 
 -- Select Data for Debugging
