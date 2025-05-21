@@ -569,6 +569,24 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
+    [HttpGet("GetAllRoomRequests")]
+    public IActionResult GetAllRoomRequests(int ComId)
+    {
+        try
+        {
+            List<DTO.RoomRequest> Requests = context.RoomRequests
+                .Where(rr => rr.ComId == ComId)
+                .Select(rr => new DTO.RoomRequest(rr))
+                .ToList();
+
+            return Ok(Requests);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpPut("UpdateRoomRequest")]
     public IActionResult UpdateRoomRequest([FromBody] DTO.RoomRequest roomRequest)
     {
