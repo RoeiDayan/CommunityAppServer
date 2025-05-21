@@ -664,6 +664,30 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
+    [HttpPost("CreateExpense")]
+    public IActionResult CreateExpense([FromBody] DTO.Expense expense)
+    {
+        try
+        {
+            context.Expenses.Add(expense.GetExpense());
+            int changes = context.SaveChanges();
+
+            if (changes > 0)
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return Ok(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error: {ex.Message}");
+        }
+    }
+
+
 }
 
 
