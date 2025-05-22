@@ -705,6 +705,74 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
+
+    [HttpPost("IssuePaymentToAllMembers")]
+    public IActionResult IssuePaymentToAllMembers([FromBody]DTO.Payment p)
+    {
+        try
+        {
+            var approvedMembers = context.Members
+                .Where(m => m.ComId == p.ComId && m.IsApproved == true)
+                .ToList();
+
+            if (!approvedMembers.Any())
+                return NotFound("No approved members found in this community");
+
+            var payments = new List<Models.Payment>();
+
+            foreach (var member in approvedMembers)
+            {
+                var dtoCopy = new DTO.Payment
+                {
+                    ComId = p.ComId,
+                    UserId = member.UserId,
+                    Amount = p.Amount,
+                    Details = p.Details,
+                    MarkedPayed = p.MarkedPayed,
+                    WasPayed = false,
+                    PayFrom = p.PayFrom,
+                    PayUntil = p.PayUntil
+                };
+                payments.Add(dtoCopy.GetPayment()); // Convert to Models.Payment
+            }
+
+            context.Payments.AddRange(payments);
+            context.SaveChanges();
+
+            return Ok($"Payment issued to {payments.Count} approved members");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error issuing payment: {ex.Message}");
+        }
+    }
+
+
+    [HttpPost("IssuePaymentToMember")]
+    public IActionResult IssuePaymentToMember([FromBody]DTO.Payment p)
+    {
+        try
+        {
+            // Verify the member exists and is approved in this community
+            var member = context.Members
+                .FirstOrDefault(m => m.UserId == p.UserId && m.ComId == p.ComId && m.IsApproved == true);
+
+            if (member == null)
+                return NotFound($"No approved member found with User ID {p.UserId} in Community {p.ComId}");
+
+            
+
+            context.Payments.Add(p.GetPayment());
+            context.SaveChanges();
+
+            return Ok("Payment issued successfully");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
 }
 
 

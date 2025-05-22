@@ -6,6 +6,7 @@ namespace CommunityAppServer.DTO
 {
     public class Payment
     {
+        public Payment() { }
         public int PaymentId { get; set; }
 
         public int ComId { get; set; }
