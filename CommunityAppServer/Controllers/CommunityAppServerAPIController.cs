@@ -2,6 +2,7 @@
 using CommunityAppServer.Models;
 using Microsoft.EntityFrameworkCore;
 using CommunityAppServer.DTO;
+using Azure.Core;
 
 namespace CommunityAppServer.Controllers;
 
@@ -687,6 +688,22 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
+    [HttpGet("GetCommunityExpenses")]
+    public IActionResult GetCommunityExpenses(int ComId)
+    {
+        try
+        {
+            List<DTO.Expense> exp = context.Expenses
+                .Where(e => e.ComId == ComId)
+                .Select(e => new DTO.Expense(e))
+                .ToList();
+            return Ok(exp);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
 }
 
