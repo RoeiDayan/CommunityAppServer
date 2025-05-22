@@ -249,6 +249,7 @@ SELECT * FROM Notices;
 SELECT * FROM CommunityNotices;
 SELECT * FROM RoomRequests;
 SELECT * FROM Expenses;
+SELECT * FROM Payments;
 
 CREATE LOGIN [AdminLogin] WITH PASSWORD = 'ComPass';
 Go
