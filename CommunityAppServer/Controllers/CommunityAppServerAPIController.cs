@@ -734,6 +734,8 @@ public class CommunityAppServerAPIController : ControllerBase
                     PayUntil = p.PayUntil
                 };
                 payments.Add(dtoCopy.GetPayment()); // Convert to Models.Payment
+                RecalculateMemberBalance(member.UserId, member.ComId);
+
             }
 
             context.Payments.AddRange(payments);
@@ -760,8 +762,8 @@ public class CommunityAppServerAPIController : ControllerBase
             if (member == null)
                 return NotFound($"No approved member found with User ID {p.UserId} in Community {p.ComId}");
 
-            
 
+            RecalculateMemberBalance(p.UserId, p.ComId);
             context.Payments.Add(p.GetPayment());
             context.SaveChanges();
 
@@ -771,6 +773,35 @@ public class CommunityAppServerAPIController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+    }
+
+    [HttpGet("GetMemberPayments")]
+    public IActionResult GetMemberPayments(int ComId, int UserId)
+    {
+        try
+        {
+            List<DTO.Payment> payments =
+                context.Payments.Where(p => p.ComId == ComId && p.UserId == UserId)
+                .Select(p=> new DTO.Payment(p)).ToList();
+            return Ok(payments);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    private void RecalculateMemberBalance(int userId, int comId)
+    {
+        var member = context.Members.FirstOrDefault(m => m.UserId == userId && m.ComId == comId);
+        if (member == null)
+            return;
+
+        var unpaidPayments = context.Payments
+            .Where(p => p.UserId == userId && p.ComId == comId && (p.WasPayed == false || p.WasPayed == null))
+            .Sum(p => p.Amount);
+
+        member.Balance = unpaidPayments;
+        context.SaveChanges();
     }
 
 }
