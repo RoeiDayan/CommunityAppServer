@@ -8,10 +8,8 @@ namespace CommunityAppServer.DTO
         public Member() { }
         public int ComId { get; set; }
 
-        [Key]
         public int UserId { get; set; }
 
-        [StringLength(20)]
         public string? Role { get; set; }
 
         public int? Balance { get; set; }

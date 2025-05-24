@@ -763,9 +763,9 @@ public class CommunityAppServerAPIController : ControllerBase
                 return NotFound($"No approved member found with User ID {p.UserId} in Community {p.ComId}");
 
 
-            RecalculateMemberBalance(p.UserId, p.ComId);
             context.Payments.Add(p.GetPayment());
             context.SaveChanges();
+            RecalculateMemberBalance(p.UserId, p.ComId);
 
             return Ok("Payment issued successfully");
         }
@@ -804,6 +804,79 @@ public class CommunityAppServerAPIController : ControllerBase
         context.SaveChanges();
     }
 
+    [HttpGet("GetCommunityPayments")]
+    public IActionResult GetCommunityPayments(int ComId)
+    {
+        try
+        {
+            var paymentsWithMemberAccount = (from payment in context.Payments
+                                             where payment.ComId == ComId
+                                             join member in context.Members
+                                                 on new { payment.ComId, payment.UserId }
+                                                 equals new { member.ComId, member.UserId }
+                                             join account in context.Accounts
+                                                 on member.UserId equals account.Id
+                                             select new PaymentMemberAccount
+                                             {
+                                                 Payment = new DTO.Payment(payment),
+                                                 Member = new DTO.Member(member),
+                                                 Account = new DTO.Account(account)
+                                             }).ToList();
+
+            return Ok(paymentsWithMemberAccount);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("DeleteMemberPayment")]
+    public IActionResult DeleteMemberPayment(int payId)
+    {
+        try
+        {
+            Models.Payment pay = context.Payments
+                                 .Where(pay => pay.PaymentId == payId)
+                                 .FirstOrDefault();
+            if (pay != null)
+            {
+                context.Payments.Remove(pay);
+                context.SaveChanges();
+                RecalculateMemberBalance(pay.UserId, pay.ComId);
+
+            }
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        
+    }
+
+    [HttpPut("UpdatePayment")]
+    public IActionResult UpdatePayment([FromBody] DTO.Payment payment)
+    {
+        try
+        {
+            Models.Payment? existingPayment = context.Payments.FirstOrDefault(p => p.PaymentId == payment.PaymentId);
+            if (existingPayment == null)
+            {
+                return NotFound("Payment not found");
+            }
+
+            existingPayment.WasPayed = payment.WasPayed;
+            context.SaveChanges();
+            RecalculateMemberBalance(existingPayment.UserId, existingPayment.ComId);
+
+            return Ok(true);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }
 
 

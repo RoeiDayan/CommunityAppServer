@@ -5,17 +5,12 @@ namespace CommunityAppServer.DTO
 {
     public class Account
     {
-        [Key]
-        [Column("ID")]
         public int Id { get; set; }
 
-        [StringLength(100)]
         public string? Email { get; set; }
 
-        [StringLength(20)]
         public string? Name { get; set; }
 
-        [StringLength(255)]
         public string? Password { get; set; }
 
         [Column(TypeName = "datetime")]
