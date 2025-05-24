@@ -809,7 +809,7 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
-            var paymentsWithMemberAccount = (from payment in context.Payments
+            List<PaymentMemberAccount> paymentsWithMemberAccount = (from payment in context.Payments
                                              where payment.ComId == ComId
                                              join member in context.Members
                                                  on new { payment.ComId, payment.UserId }
