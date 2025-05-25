@@ -21,12 +21,6 @@ public class CommunityAppServerAPIController : ControllerBase
         this.webHostEnvironment = env;
     }
 
-    [HttpGet]
-    [Route("TestServer")]
-    public ActionResult<string> TestServer()
-    {
-        return Ok("Server Responded Successfully");
-    }
     [HttpPost("login")]
     public IActionResult Login([FromBody] DTO.LoginInfo loginDto)
     {
