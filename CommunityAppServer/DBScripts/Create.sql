@@ -252,9 +252,6 @@ SELECT * FROM Expenses;
 SELECT * FROM Payments;
 
 
-UPDATE Payments
-SET WasPayed = 1
-WHERE PaymentId = 1;
 
 
 CREATE LOGIN [AdminLogin] WITH PASSWORD = 'ComPass';
