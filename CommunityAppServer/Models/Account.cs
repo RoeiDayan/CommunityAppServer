@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CommunityAppServer.Models;
 
 [Table("Account")]
-[Index("Email", Name = "UQ__Account__A9D105347BA26D16", IsUnique = true)]
+[Index("Email", Name = "UQ__Account__A9D1053404930D83", IsUnique = true)]
 public partial class Account
 {
     [Key]
@@ -29,6 +29,9 @@ public partial class Account
 
     [Column(TypeName = "datetime")]
     public DateTime? CreatedAt { get; set; }
+
+    [StringLength(255)]
+    public string? ProfilePhotoFileName { get; set; }
 
     [InverseProperty("User")]
     public virtual ICollection<Member> Members { get; set; } = new List<Member>();

@@ -17,6 +17,7 @@ namespace CommunityAppServer.DTO
         public DateTime? CreatedAt { get; set; }
         public string? PhoneNumber { get; set; }
 
+        public string? ProfilePhotoFileName { get; set; }
 
         public Account() 
         {
@@ -32,6 +33,7 @@ namespace CommunityAppServer.DTO
             acc.Password = this.Password;
             acc.CreatedAt = this.CreatedAt;
             acc.PhoneNumber = this.PhoneNumber;
+            acc.ProfilePhotoFileName = this.ProfilePhotoFileName;
             return acc;
         }
         public Account(Models.Account acc)
@@ -42,6 +44,7 @@ namespace CommunityAppServer.DTO
             this.Password = acc.Password;
             this.CreatedAt = acc.CreatedAt;
             this.PhoneNumber = acc.PhoneNumber;
+            this.ProfilePhotoFileName = acc.ProfilePhotoFileName;
         }
     }
 }
