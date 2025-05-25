@@ -646,7 +646,8 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
-            DateTime now = DateTime.UtcNow;
+            DateTime now = DateTime.Now;
+
 
             var pastRequests = context.RoomRequests
                 .Where(r => r.ComId == comId && r.EndTime < now)
@@ -664,6 +665,7 @@ public class CommunityAppServerAPIController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
 
     [HttpPost("CreateExpense")]
     public IActionResult CreateExpense([FromBody] DTO.Expense expense)

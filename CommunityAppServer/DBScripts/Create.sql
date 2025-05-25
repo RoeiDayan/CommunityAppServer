@@ -236,7 +236,8 @@ VALUES
     (1, 1, '2025-05-22 10:00:00', '2025-05-22 12:00:00', 'b', 1),       -- Tomorrow
     (1, 1, '2025-05-23 18:00:00', '2025-05-23 20:00:00', 'c', 1),      -- The day after tomorrow
     (1, 1, '2025-05-24 18:00:00', '2025-05-25 20:00:00', 'd', 0),      -- The day after tomorrow
-    (1, 1, '2025-04-24 18:00:00', '2025-04-25 20:00:00', 'e', 1);       -- The day after tomorrow
+    (1, 1, '2025-05-24 18:00:00', '2025-05-26 20:00:00', 'e', 1),       -- The day after tomorrow
+    (3, 1, '2025-06-24 18:00:00', '2025-06-26 20:00:00', 'f', 1);       -- The day after tomorrow
 
 
 
@@ -246,7 +247,6 @@ SELECT * FROM Members;
 SELECT * FROM Community;
 SELECT * FROM Report;
 SELECT * FROM Notices;
-SELECT * FROM CommunityNotices;
 SELECT * FROM RoomRequests;
 SELECT * FROM Expenses;
 SELECT * FROM Payments;
