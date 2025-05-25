@@ -419,8 +419,8 @@ public class CommunityAppServerAPIController : ControllerBase
     //    }
     //}
 
-    
-    
+
+
     [HttpGet("GetMemberAccount")]
     public IActionResult GetMemberAccount(int UserId, int ComId)
     {
@@ -707,7 +707,7 @@ public class CommunityAppServerAPIController : ControllerBase
 
 
     [HttpPost("IssuePaymentToAllMembers")]
-    public IActionResult IssuePaymentToAllMembers([FromBody]DTO.Payment p)
+    public IActionResult IssuePaymentToAllMembers([FromBody] DTO.Payment p)
     {
         try
         {
@@ -751,7 +751,7 @@ public class CommunityAppServerAPIController : ControllerBase
 
 
     [HttpPost("IssuePaymentToMember")]
-    public IActionResult IssuePaymentToMember([FromBody]DTO.Payment p)
+    public IActionResult IssuePaymentToMember([FromBody] DTO.Payment p)
     {
         try
         {
@@ -782,7 +782,7 @@ public class CommunityAppServerAPIController : ControllerBase
         {
             List<DTO.Payment> payments =
                 context.Payments.Where(p => p.ComId == ComId && p.UserId == UserId)
-                .Select(p=> new DTO.Payment(p)).ToList();
+                .Select(p => new DTO.Payment(p)).ToList();
             return Ok(payments);
         }
         catch (Exception ex)
@@ -810,18 +810,18 @@ public class CommunityAppServerAPIController : ControllerBase
         try
         {
             List<PaymentMemberAccount> paymentsWithMemberAccount = (from payment in context.Payments
-                                             where payment.ComId == ComId
-                                             join member in context.Members
-                                                 on new { payment.ComId, payment.UserId }
-                                                 equals new { member.ComId, member.UserId }
-                                             join account in context.Accounts
-                                                 on member.UserId equals account.Id
-                                             select new PaymentMemberAccount
-                                             {
-                                                 Payment = new DTO.Payment(payment),
-                                                 Member = new DTO.Member(member),
-                                                 Account = new DTO.Account(account)
-                                             }).ToList();
+                                                                    where payment.ComId == ComId
+                                                                    join member in context.Members
+                                                                        on new { payment.ComId, payment.UserId }
+                                                                        equals new { member.ComId, member.UserId }
+                                                                    join account in context.Accounts
+                                                                        on member.UserId equals account.Id
+                                                                    select new PaymentMemberAccount
+                                                                    {
+                                                                        Payment = new DTO.Payment(payment),
+                                                                        Member = new DTO.Member(member),
+                                                                        Account = new DTO.Account(account)
+                                                                    }).ToList();
 
             return Ok(paymentsWithMemberAccount);
         }
@@ -852,7 +852,7 @@ public class CommunityAppServerAPIController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-        
+
     }
 
     [HttpPut("UpdatePayment")]
@@ -871,6 +871,50 @@ public class CommunityAppServerAPIController : ControllerBase
             RecalculateMemberBalance(existingPayment.UserId, existingPayment.ComId);
 
             return Ok(true);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("DeleteNotice")]
+    public IActionResult DeleteNotice(int noticeId)
+    {
+        try
+        {
+            Models.Notice n = context.Notices
+                                 .Where(n => n.NoticeId == noticeId)
+                                 .FirstOrDefault();
+            if (n != null)
+            {
+                context.Notices.Remove(n);
+                context.SaveChanges();
+
+            }
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("DeleteReport")]
+    public IActionResult DeleteReport(int repId)
+    {
+        try
+        {
+            Models.Report r = context.Reports
+                                 .Where(r => r.ReportId == repId)
+                                 .FirstOrDefault();
+            if (r != null)
+            {
+                context.Reports.Remove(r);
+                context.SaveChanges();
+
+            }
+            return Ok();
         }
         catch (Exception ex)
         {
