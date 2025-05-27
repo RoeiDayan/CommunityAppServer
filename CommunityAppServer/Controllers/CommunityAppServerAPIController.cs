@@ -929,11 +929,11 @@ public class CommunityAppServerAPIController : ControllerBase
         }
 
         //Get model user class from DB with matching email. 
-        Models.AppUser? user = context.GetUser(userEmail);
+        Models.Account? acc = context.GetAccount(userEmail);
         //Clear the tracking of all objects to avoid double tracking
         context.ChangeTracker.Clear();
 
-        if (user == null)
+        if (acc == null)
         {
             return Unauthorized("User is not found in the database");
         }
@@ -958,7 +958,7 @@ public class CommunityAppServerAPIController : ControllerBase
             }
 
             //Build path in the web root (better to a specific folder under the web root
-            string filePath = $"{this.webHostEnvironment.WebRootPath}\\profileImages\\{user.Id}{extention}";
+            string filePath = $"{this.webHostEnvironment.WebRootPath}\\profileImages\\{acc.Id}{extention}";
 
             using (var stream = System.IO.File.Create(filePath))
             {
@@ -978,9 +978,33 @@ public class CommunityAppServerAPIController : ControllerBase
 
         }
 
-        DTO.AppUser dtoUser = new DTO.AppUser(user);
-        dtoUser.ProfileImagePath = GetProfileImageVirtualPath(dtoUser.Id);
-        return Ok(dtoUser);
+        DTO.Account dtoAcc = new DTO.Account(acc);
+        dtoAcc.ProfilePhotoFileName = GetProfileImageVirtualPath(dtoAcc.Id);
+        return Ok(dtoAcc);
+    }
+
+    private string GetProfileImageVirtualPath(int userId)
+    {
+        string virtualPath = $"/profileImages/{userId}";
+        string path = $"{this.webHostEnvironment.WebRootPath}\\profileImages\\{userId}.png";
+        if (System.IO.File.Exists(path))
+        {
+            virtualPath += ".png";
+        }
+        else
+        {
+            path = $"{this.webHostEnvironment.WebRootPath}\\profileImages\\{userId}.jpg";
+            if (System.IO.File.Exists(path))
+            {
+                virtualPath += ".jpg";
+            }
+            else
+            {
+                virtualPath = $"/profileImages/default.png";
+            }
+        }
+
+        return virtualPath;
     }
 
     //this function gets a file stream and check if it is an image
