@@ -37,9 +37,6 @@ public partial class Notice
     [InverseProperty("Notices")]
     public virtual Community Com { get; set; } = null!;
 
-    [InverseProperty("Notice")]
-    public virtual ICollection<NoticeFile> NoticeFiles { get; set; } = new List<NoticeFile>();
-
     [ForeignKey("UserId")]
     [InverseProperty("Notices")]
     public virtual Account User { get; set; } = null!;

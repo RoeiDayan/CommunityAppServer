@@ -21,7 +21,6 @@ namespace CommunityAppServer.DTO
 
         public int? Status { get; set; }
 
-        public bool? IsAnon { get; set; }
 
         public DateTime? CreatedAt { get; set; }
 
@@ -55,9 +54,6 @@ namespace CommunityAppServer.DTO
             rep.UserId = UserId;
             rep.ComId = ComId;
             rep.ReportDesc = ReportDesc;
-            rep.Priority = Priority;
-            rep.Status = Status;
-            rep.IsAnon = IsAnon;
             rep.CreatedAt = CreatedAt;
             rep.Title = Title;
             return rep;
@@ -68,9 +64,6 @@ namespace CommunityAppServer.DTO
             this.UserId = rep.UserId;
             this.ComId = rep.ComId;
             this.ReportDesc = rep.ReportDesc;
-            this.Priority = rep.Priority;
-            this.Status = rep.Status;
-            this.IsAnon = rep.IsAnon;
             this.CreatedAt = rep.CreatedAt;
             this.Title = rep.Title;
         }

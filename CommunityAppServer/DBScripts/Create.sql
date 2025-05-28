@@ -51,15 +51,7 @@ CREATE TABLE Members (
   FOREIGN KEY (ComId) REFERENCES Community(ComId) ON DELETE CASCADE
 );
 
-CREATE TABLE Priority (
-  PriorityNum INT PRIMARY KEY,
-  Priority NVARCHAR(20) NOT NULL
-);
 
-CREATE TABLE Status (
-  StatNum INT PRIMARY KEY,
-  [Status] NVARCHAR(20) NOT NULL
-);
 
 CREATE TABLE Report (
   ReportId INT IDENTITY(1,1) PRIMARY KEY,
@@ -67,14 +59,9 @@ CREATE TABLE Report (
   ComId INT NOT NULL,
   Title NVARCHAR(255) NOT NULL DEFAULT '',
   ReportDesc NVARCHAR(MAX),
-  Priority INT,
-  Status INT,
-  IsAnon BIT DEFAULT 0,
   CreatedAt DATETIME DEFAULT GETDATE(),
   FOREIGN KEY (UserId) REFERENCES Account(ID) ON DELETE CASCADE,
-  FOREIGN KEY (ComId) REFERENCES Community(ComId) ON DELETE CASCADE,
-  FOREIGN KEY (Priority) REFERENCES Priority(PriorityNum),
-  FOREIGN KEY (Status) REFERENCES Status(StatNum)
+  FOREIGN KEY (ComId) REFERENCES Community(ComId) ON DELETE CASCADE
 );
 
 CREATE INDEX IX_Report_CreatedAt ON Report(CreatedAt);
@@ -137,34 +124,8 @@ CREATE TABLE RoomRequests (
   FOREIGN KEY (ComId) REFERENCES Community(ComId) ON DELETE CASCADE
 );
 
-CREATE TABLE TenantRoom (
-  ComId INT,
-  Status NVARCHAR(20),
-  KeyHolderId INT,
-  SessionStart DATETIME,
-  SessionEnd DATETIME,
-  PRIMARY KEY (ComId, KeyHolderId),
-  FOREIGN KEY (ComId) REFERENCES Community(ComId),
-  FOREIGN KEY (KeyHolderId) REFERENCES Account(ID)
-);
 
--- Create the ReportFiles table
-CREATE TABLE ReportFiles (
-  ReportId INT,
-  FileName NVARCHAR(255),  -- Added a column to store the file name
-  RepFileExt NVARCHAR(5), 
-  PRIMARY KEY (ReportId, FileName),
-  FOREIGN KEY (ReportId) REFERENCES Report(ReportId)
-);
 
--- Create the NoticeFiles table
-CREATE TABLE NoticeFiles (
-  NoticeId INT,
-  FileName NVARCHAR(255),  -- Added a column to store the file name
-  NoticeFileExt NVARCHAR(5), 
-  PRIMARY KEY (NoticeId, FileName),
-  FOREIGN KEY (NoticeId) REFERENCES Notices(NoticeId)
-);
 
 -- Insert Initial Data
 INSERT INTO Account (Email, Name, Password, PhoneNumber) VALUES 
@@ -205,18 +166,11 @@ VALUES
   (11, 1, 'Resident', 0, 11, 0, 1, 0, 0, 1),
   (12, 1, 'Resident, Provider', 70, 12, 0, 1, 0, 1, 1);
 
-INSERT INTO Priority (PriorityNum, Priority) VALUES 
-(0,'Low'),
-(1, 'Normal');
 
-INSERT INTO Status (StatNum, [Status]) VALUES 
-(0,'No Status'),
-(1, 'Normal');
-
-INSERT INTO Report (UserId, ComId, ReportDesc, [Priority], [Status], IsAnon, Title)
+INSERT INTO Report (UserId, ComId, ReportDesc, Title)
 VALUES 
-  (1, 1, 'Encountered a mess in the trash room.', 1, 1, 0, 'Watch out!'),
-  (1, 1, 'The elevator has been stuck for hours, causing inconvenience.', 1, 1, 1, 'Elevator Problem');
+  (1, 1, 'Encountered a mess in the trash room.', 'Watch out!'),
+  (1, 1, 'The elevator has been stuck for hours, causing inconvenience.', 'Elevator Problem');
 
 INSERT INTO Notices (UserId, ComId, Title, NoticeDesc, StartTime, EndTime)
 VALUES
@@ -226,10 +180,6 @@ VALUES
     (1, 1, 'Garbage Collection Delay', 'Garbage collection will be delayed by a day due to a public holiday. Please place bins out on Tuesday instead of Monday.', '2025-03-18 00:00:00', '2025-03-18 23:59:59'),
     (1, 1, 'Nothing', 'Blank.', NULL, NULL);
 
--- Insert into TenantRoom
-INSERT INTO TenantRoom (ComId, Status, KeyHolderId, SessionStart, SessionEnd)
-VALUES 
-(1, 'Occupied', 1, '2025-04-21 08:00:00', '2025-04-21 20:00:00');
 
 -- Insert into RoomRequests
 INSERT INTO RoomRequests (UserId, ComId, StartTime, EndTime, Text, IsApproved)

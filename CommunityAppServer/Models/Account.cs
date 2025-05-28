@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CommunityAppServer.Models;
 
 [Table("Account")]
-[Index("Email", Name = "UQ__Account__A9D1053404930D83", IsUnique = true)]
+[Index("Email", Name = "UQ__Account__A9D105347A2D888A", IsUnique = true)]
 public partial class Account
 {
     [Key]
@@ -47,7 +47,4 @@ public partial class Account
 
     [InverseProperty("User")]
     public virtual ICollection<RoomRequest> RoomRequests { get; set; } = new List<RoomRequest>();
-
-    [InverseProperty("KeyHolder")]
-    public virtual ICollection<TenantRoom> TenantRooms { get; set; } = new List<TenantRoom>();
 }

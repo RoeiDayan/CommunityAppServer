@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CommunityAppServer.Models;
 
 [Table("Community")]
-[Index("ComCode", Name = "UQ__Communit__5BCA59DC8E7AC53F", IsUnique = true)]
+[Index("ComCode", Name = "UQ__Communit__5BCA59DC36BFD81D", IsUnique = true)]
 public partial class Community
 {
     [Key]
@@ -48,7 +48,4 @@ public partial class Community
 
     [InverseProperty("Com")]
     public virtual ICollection<RoomRequest> RoomRequests { get; set; } = new List<RoomRequest>();
-
-    [InverseProperty("Com")]
-    public virtual ICollection<TenantRoom> TenantRooms { get; set; } = new List<TenantRoom>();
 }
