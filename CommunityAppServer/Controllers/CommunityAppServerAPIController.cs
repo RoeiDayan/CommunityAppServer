@@ -724,7 +724,6 @@ public class CommunityAppServerAPIController : ControllerBase
                     UserId = member.UserId,
                     Amount = p.Amount,
                     Details = p.Details,
-                    MarkedPayed = p.MarkedPayed,
                     WasPayed = false,
                     PayFrom = p.PayFrom,
                     PayUntil = p.PayUntil
