@@ -932,55 +932,84 @@ public class CommunityAppServerAPIController : ControllerBase
         Models.Account? acc = context.GetAccount(userEmail);
         //Clear the tracking of all objects to avoid double tracking
         context.ChangeTracker.Clear();
-
         if (acc == null)
         {
             return Unauthorized("User is not found in the database");
         }
 
-
-        //Read all files sent
-        long imagesSize = 0;
-
-        if (file.Length > 0)
+        if (file == null || file.Length == 0)
         {
-            //Check the file extention!
-            string[] allowedExtentions = { ".jpg" };
-            string extention = "";
-            if (file.FileName.LastIndexOf(".") > 0)
-            {
-                extention = file.FileName.Substring(file.FileName.LastIndexOf(".")).ToLower();
-            }
-            if (!allowedExtentions.Where(e => e == extention).Any())
-            {
-                //Extention is not supported
-                return BadRequest("File sent with non supported extention");
-            }
-
-            //Build path in the web root (better to a specific folder under the web root
-            string filePath = $"{this.webHostEnvironment.WebRootPath}\\profileImages\\{acc.Id}{extention}";
-
-            using (var stream = System.IO.File.Create(filePath))
-            {
-                await file.CopyToAsync(stream);
-
-                if (IsImage(stream))
-                {
-                    imagesSize += stream.Length;
-                }
-                else
-                {
-                    //Delete the file if it is not supported!
-                    System.IO.File.Delete(filePath);
-                }
-
-            }
-
+            return BadRequest("No file was uploaded");
         }
 
-        DTO.Account dtoAcc = new DTO.Account(acc);
-        dtoAcc.ProfilePhotoFileName = GetProfileImageVirtualPath(dtoAcc.Id);
-        return Ok(dtoAcc);
+        //Check the file extension!
+        string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
+        string extension = "";
+        if (file.FileName.LastIndexOf(".") > 0)
+        {
+            extension = file.FileName.Substring(file.FileName.LastIndexOf(".")).ToLower();
+        }
+
+        if (!allowedExtensions.Contains(extension))
+        {
+            return BadRequest("File sent with non supported extension");
+        }
+
+        try
+        {
+            // Check if file is actually an image before saving
+            using (var tempStream = new MemoryStream())
+            {
+                await file.CopyToAsync(tempStream);
+                if (!IsImage(tempStream))
+                {
+                    return BadRequest("File is not a valid image");
+                }
+            }
+
+            //Build path in the web root
+            string fileName = $"{acc.Id}{extension}";
+            string filePath = Path.Combine(this.webHostEnvironment.WebRootPath, "profileImages", fileName);
+
+            // Ensure the directory exists
+            string directory = Path.GetDirectoryName(filePath);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            // Delete existing profile images for this user
+            string[] existingFiles = Directory.GetFiles(
+                Path.Combine(this.webHostEnvironment.WebRootPath, "profileImages"),
+                $"{acc.Id}.*");
+            foreach (string existingFile in existingFiles)
+            {
+                System.IO.File.Delete(existingFile);
+            }
+
+            // Save the new file
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            // Update the database with the new profile photo filename
+            string virtualPath = GetProfileImageVirtualPath(acc.Id);
+            acc.ProfilePhotoFileName = virtualPath;
+
+            // Save changes to database
+            context.UpdateAccount(acc); // You'll need to implement this method in your context
+
+            DTO.Account dtoAcc = new DTO.Account(acc);
+            dtoAcc.ProfilePhotoFileName = virtualPath;
+
+            return Ok(dtoAcc);
+        }
+        catch (Exception ex)
+        {
+            // Log the exception
+            return StatusCode(500, "An error occurred while uploading the image");
+        }
     }
 
     private string GetProfileImageVirtualPath(int userId)

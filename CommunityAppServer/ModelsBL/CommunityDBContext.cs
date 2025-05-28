@@ -11,6 +11,7 @@ public partial class CommunityDBContext : DbContext
         Models.Account? acc = this.Accounts.Where(a => a.Email == email).FirstOrDefault();
         return acc;
     }
+
     public Account? GetAccount(int id)
     {
         Models.Account? acc = this.Accounts.Where(a => a.Id == id).FirstOrDefault();
@@ -23,5 +24,18 @@ public partial class CommunityDBContext : DbContext
         return mems;
     }
 
-
+    // Add this method to update account information
+    public void UpdateAccount(Account account)
+    {
+        try
+        {
+            this.Entry(account).State = EntityState.Modified;
+            this.SaveChanges();
+        }
+        catch (Exception ex)
+        {
+            // Handle exception - you might want to log this
+            throw new Exception($"Failed to update account: {ex.Message}", ex);
+        }
+    }
 }
