@@ -17,7 +17,6 @@ namespace CommunityAppServer.DTO
 
         public string? Details { get; set; }
 
-        public bool? MarkedPayed { get; set; }
 
         public bool? WasPayed { get; set; }
 
@@ -33,7 +32,6 @@ namespace CommunityAppServer.DTO
             pay.UserId = UserId;
             pay.Amount = Amount;
             pay.Details = Details;
-            pay.MarkedPayed = MarkedPayed;
             pay.WasPayed = WasPayed;
             pay.PayFrom = PayFrom;
             pay.PayUntil = PayUntil;
@@ -46,7 +44,6 @@ namespace CommunityAppServer.DTO
             this.UserId = pay.UserId;
             this.Amount = pay.Amount;
             this.Details = pay.Details;
-            this.MarkedPayed= pay.MarkedPayed;
             this.WasPayed= pay.WasPayed;
             this.PayFrom = pay.PayFrom;
             this.PayUntil = pay.PayUntil;

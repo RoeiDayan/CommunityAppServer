@@ -90,7 +90,6 @@ CREATE TABLE Payments (
   UserId INT NOT NULL,
   Amount INT NOT NULL,
   Details NVARCHAR(200),
-  MarkedPayed BIT DEFAULT 0,
   WasPayed BIT DEFAULT 0,
   PayFrom DATE,
   PayUntil DATE,

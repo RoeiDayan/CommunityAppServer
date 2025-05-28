@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CommunityAppServer.Models;
 
 [Table("Account")]
-[Index("Email", Name = "UQ__Account__A9D105348FBF282D", IsUnique = true)]
+[Index("Email", Name = "UQ__Account__A9D1053422AA7AF0", IsUnique = true)]
 public partial class Account
 {
     [Key]

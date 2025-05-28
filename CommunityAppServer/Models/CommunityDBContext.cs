@@ -39,32 +39,32 @@ public partial class CommunityDBContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC2746B07617");
+            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC27C548B4D9");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
         });
 
         modelBuilder.Entity<Community>(entity =>
         {
-            entity.HasKey(e => e.ComId).HasName("PK__Communit__E15F4112E6203F77");
+            entity.HasKey(e => e.ComId).HasName("PK__Communit__E15F4112333618F5");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
         });
 
         modelBuilder.Entity<Expense>(entity =>
         {
-            entity.HasKey(e => e.ExpenseId).HasName("PK__Expenses__1445CFD3B70C75A5");
+            entity.HasKey(e => e.ExpenseId).HasName("PK__Expenses__1445CFD325D28DB4");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
 
             entity.HasOne(d => d.Com).WithMany(p => p.Expenses)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Expenses__ComId__47DBAE45");
+                .HasConstraintName("FK__Expenses__ComId__46E78A0C");
         });
 
         modelBuilder.Entity<Member>(entity =>
         {
-            entity.HasKey(e => new { e.ComId, e.UserId }).HasName("PK__Members__3027CDD6231D9D93");
+            entity.HasKey(e => new { e.ComId, e.UserId }).HasName("PK__Members__3027CDD673F01B76");
 
             entity.Property(e => e.Balance).HasDefaultValue(0);
             entity.Property(e => e.IsApproved).HasDefaultValue(false);
@@ -81,7 +81,7 @@ public partial class CommunityDBContext : DbContext
 
         modelBuilder.Entity<Notice>(entity =>
         {
-            entity.HasKey(e => e.NoticeId).HasName("PK__Notices__CE83CBE5B6DB15C9");
+            entity.HasKey(e => e.NoticeId).HasName("PK__Notices__CE83CBE55FFD9DC1");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
 
@@ -92,19 +92,18 @@ public partial class CommunityDBContext : DbContext
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A3802BE5A08");
+            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A38A12CA68B");
 
-            entity.Property(e => e.MarkedPayed).HasDefaultValue(false);
             entity.Property(e => e.WasPayed).HasDefaultValue(false);
 
-            entity.HasOne(d => d.Com).WithMany(p => p.Payments).HasConstraintName("FK__Payments__ComId__4316F928");
+            entity.HasOne(d => d.Com).WithMany(p => p.Payments).HasConstraintName("FK__Payments__ComId__4222D4EF");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Payments).HasConstraintName("FK__Payments__UserId__440B1D61");
+            entity.HasOne(d => d.User).WithMany(p => p.Payments).HasConstraintName("FK__Payments__UserId__4316F928");
         });
 
         modelBuilder.Entity<Report>(entity =>
         {
-            entity.HasKey(e => e.ReportId).HasName("PK__Report__D5BD480586A6482C");
+            entity.HasKey(e => e.ReportId).HasName("PK__Report__D5BD4805FF34E1BF");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.Title).HasDefaultValue("");
@@ -116,14 +115,14 @@ public partial class CommunityDBContext : DbContext
 
         modelBuilder.Entity<RoomRequest>(entity =>
         {
-            entity.HasKey(e => e.RequestId).HasName("PK__RoomRequ__33A8517A830222BA");
+            entity.HasKey(e => e.RequestId).HasName("PK__RoomRequ__33A8517AF3444343");
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.IsApproved).HasDefaultValue(false);
 
-            entity.HasOne(d => d.Com).WithMany(p => p.RoomRequests).HasConstraintName("FK__RoomReque__ComId__4D94879B");
+            entity.HasOne(d => d.Com).WithMany(p => p.RoomRequests).HasConstraintName("FK__RoomReque__ComId__4CA06362");
 
-            entity.HasOne(d => d.User).WithMany(p => p.RoomRequests).HasConstraintName("FK__RoomReque__UserI__4CA06362");
+            entity.HasOne(d => d.User).WithMany(p => p.RoomRequests).HasConstraintName("FK__RoomReque__UserI__4BAC3F29");
         });
 
         OnModelCreatingPartial(modelBuilder);
