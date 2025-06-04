@@ -178,6 +178,22 @@ VALUES
     (1, 1, 'Garbage Collection Delay', 'Garbage collection will be delayed by a day due to a public holiday. Please place bins out on Tuesday instead of Monday.', '2025-03-18 00:00:00', '2025-03-18 23:59:59'),
     (1, 1, 'Nothing', 'Blank.', NULL, NULL);
 
+    INSERT INTO Expenses (ComId, Title, Description, Amount, ExpenseDate)
+VALUES 
+(1, N'Electricity Bill', N'Monthly invoice for building electricity usage', 1580.75, '2025-05-01'),
+
+(1, N'Cleaning Services', N'Weekly cleaning of public areas for April', 1200.00, '2025-04-30'),
+
+(1, N'Elevator Maintenance', N'Regular maintenance and inspection of the elevator', 780.00, '2025-04-15'),
+
+(1, N'Pipe Repair', N'Leak repair in the main pipeline on the 2nd floor', 450.50, '2025-03-27'),
+
+(1, N'LED Lighting Installation', N'Replacement of lighting fixtures on floors 1–3 with energy-efficient LEDs', 2100.00, '2025-03-10'),
+
+(1, N'Gardening Services', N'Monthly garden maintenance – trimming and watering', 900.00, '2025-04-05'),
+
+(1, N'Building Insurance (Annual)', N'Renewal of full-coverage building insurance including liability', 3650.00, '2025-01-10');
+
 
 -- Insert into RoomRequests
 INSERT INTO RoomRequests (UserId, ComId, StartTime, EndTime, Text, IsApproved)
