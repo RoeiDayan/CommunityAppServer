@@ -1478,7 +1478,7 @@ public class CommunityAppServerAPIController : ControllerBase
     public async Task<IActionResult> UploadProfileImageAsync(IFormFile file)
     {
         //Check if who is logged in
-        string? userEmail = HttpContext.Session.GetString("loggedInUser");
+        string? userEmail = HttpContext.Session.GetString("loggedInAccount");
         if (string.IsNullOrEmpty(userEmail))
         {
             return Unauthorized("User is not logged in");

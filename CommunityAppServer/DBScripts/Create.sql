@@ -218,7 +218,7 @@ SELECT * FROM Expenses;
 SELECT * FROM Payments;
 
 
-
+--alter login [AdminLogin] WITH PASSWORD = 'ComPass';
 
 CREATE LOGIN [AdminLogin] WITH PASSWORD = 'ComPass';
 Go
