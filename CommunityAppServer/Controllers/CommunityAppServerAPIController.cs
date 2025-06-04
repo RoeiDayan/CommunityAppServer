@@ -83,18 +83,21 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
             string? userEmail = HttpContext.Session.GetString("loggedInAccount");
             if (string.IsNullOrEmpty(userEmail))
             {
                 return Unauthorized("User is not logged in");
             }
 
+            //Get model user class from DB with matching email
             Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
             context.ChangeTracker.Clear();
 
             if (account == null || (account.Id != id))
             {
-                return Unauthorized("User ID does not match");
+                return Unauthorized("User ID does not match logged in user");
             }
 
             List<DTO.MemberCommunity> memberCommunities = context.Members
@@ -114,48 +117,37 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
-    //[HttpPost("SignInToCommunity")]
-    //public IActionResult SignInToCommunity([FromBody] int comId)
-    //{
-    //    try
-    //    {
-    //        // Check if the user is logged in
-    //        string? userEmail = HttpContext.Session.GetString("loggedInAccount");
-    //        if (string.IsNullOrEmpty(userEmail))
-    //        {
-    //            return Unauthorized("User is not logged in");
-    //        }
 
-    //        // Get the account of the logged-in user
-    //        Models.Account? account = context.GetAccount(userEmail);
-    //        if (account == null)
-    //        {
-    //            return Unauthorized("Invalid user session");
-    //        }
-
-    //        // Check if the user is a member of the community
-    //        bool isMember = context.Members.Any(m => m.UserId == account.Id && m.ComId == comId);
-    //        if (!isMember)
-    //        {
-    //            return Unauthorized("User is not a member of this community");
-    //        }
-
-    //        // Store the selected community in the session
-    //        HttpContext.Session.SetInt32("selectedCommunityId", comId);
-
-    //        return Ok("Sign-in to community successful");
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return BadRequest(ex.Message);
-    //    }
-    //}
 
     [HttpGet("GetCommunityNotices")]
     public IActionResult GetCommunityNotices(int ComId)
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a member of this community
+            bool isMember = context.Members.Any(m => m.UserId == account.Id && m.ComId == ComId && m.IsApproved == true);
+            if (!isMember)
+            {
+                return Unauthorized("User is not an approved member of this community");
+            }
+
             List<DTO.Notice> comNotices = context.Notices
                 .Where(n => n.ComId == ComId) // Directly filter by ComId
                 .Select(n => new DTO.Notice(n))
@@ -174,6 +166,29 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a member of this community
+            bool isMember = context.Members.Any(m => m.UserId == account.Id && m.ComId == ComId && m.IsApproved == true);
+            if (!isMember)
+            {
+                return Unauthorized("User is not an approved member of this community");
+            }
 
             List<DTO.Report> comReports = context.Reports
             .Where(r => r.ComId == ComId)
@@ -193,6 +208,30 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a member of this community
+            bool isMember = context.Members.Any(m => m.UserId == account.Id && m.ComId == rep.ComId && m.IsApproved == true);
+            if (!isMember)
+            {
+                return Unauthorized("User is not an approved member of this community");
+            }
+
             Models.Report modelsReport = rep.GetReport();
             if (modelsReport == null)
             {
@@ -214,7 +253,6 @@ public class CommunityAppServerAPIController : ControllerBase
         }
         catch (Exception ex)
         {
-
             return BadRequest($"Error: {ex.Message}");
         }
     }
@@ -224,6 +262,30 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a manager of this community
+            var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == notice.ComId && m.IsApproved == true);
+            if (member == null || !member.IsManager == true)
+            {
+                return Unauthorized("User is not a manager of this community");
+            }
+
             Models.Notice modelsNotice = notice.GetNotice();
             if (modelsNotice == null)
             {
@@ -245,10 +307,10 @@ public class CommunityAppServerAPIController : ControllerBase
         }
         catch (Exception ex)
         {
-
             return BadRequest($"Error: {ex.Message}");
         }
     }
+
 
     [HttpPost("GetCommunityId")]
     public IActionResult GetCommunityId([FromBody] string s)
@@ -280,6 +342,29 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if the logged in user is trying to join themselves to the community
+            if (account.Id != member.UserId)
+            {
+                return Unauthorized("User can only join themselves to a community");
+            }
+
             if (member == null)
             {
                 return BadRequest("Invalid member data.");
@@ -306,7 +391,6 @@ public class CommunityAppServerAPIController : ControllerBase
         }
         catch (Exception ex)
         {
-
             return BadRequest($"Error: {ex.Message}");
         }
     }
@@ -318,6 +402,29 @@ public class CommunityAppServerAPIController : ControllerBase
         DTO.Member member = MemCom.Member;
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if the logged in user is trying to create a community for themselves
+            if (account.Id != member.UserId)
+            {
+                return Unauthorized("User can only create a community for themselves");
+            }
+
             string s = community.ComCode;
             if (s == null)
             {
@@ -361,7 +468,6 @@ public class CommunityAppServerAPIController : ControllerBase
         }
         catch (Exception ex)
         {
-
             return BadRequest($"Error: {ex.Message}");
         }
     }
@@ -372,6 +478,25 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            
+
             List<DTO.MemberAccount> comMemberAccounts = context.Members
                 .Where(m => m.ComId == ComId && m.IsApproved == true) // Only approved members
                 .Join(
@@ -394,24 +519,6 @@ public class CommunityAppServerAPIController : ControllerBase
         }
     }
 
-    //[HttpGet("GetCommunityTenantRoom")]
-    //public IActionResult GetCommunityTenantRoom(int comId)
-    //{
-    //    try
-    //    {
-    //        var tenantRoom = context.TenantRooms
-    //            .FirstOrDefault(tr => tr.ComId == comId);
-
-    //        if (tenantRoom == null)
-    //            return NotFound($"No tenant room found for community ID {comId}");
-
-    //        return Ok(new DTO.TenantRoom(tenantRoom));
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return BadRequest(ex.Message);
-    //    }
-    //}
 
 
 
@@ -447,6 +554,22 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
             List<DTO.MemberAccount> comMemberAccounts = context.Members
                 .Where(m => m.ComId == ComId && m.IsApproved == ApprovedStat)
                 .Join(
@@ -472,39 +595,88 @@ public class CommunityAppServerAPIController : ControllerBase
     [HttpPost("UpdateMember")]
     public IActionResult UpdateMember([FromBody] DTO.Member member)
     {
-        var mem = context.Members
-            .FirstOrDefault(m => m.ComId == member.ComId && m.UserId == member.UserId);
-
-        if (mem == null)
-        {
-            return BadRequest("No member found");
-        }
-
-        // Update fields
-        mem.Role = member.Role;
-        mem.Balance = member.Balance;
-        mem.UnitNum = member.UnitNum;
-        mem.IsLiable = member.IsLiable;
-        mem.IsResident = member.IsResident;
-        mem.IsManager = member.IsManager;
-        mem.IsProvider = member.IsProvider;
-        mem.IsApproved = member.IsApproved;
-
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a manager of this community
+            var requestingMember = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == member.ComId && m.IsApproved == true);
+            if (requestingMember == null || !requestingMember.IsManager == true)
+            {
+                return Unauthorized("User is not a manager of this community");
+            }
+
+            var mem = context.Members
+                .FirstOrDefault(m => m.ComId == member.ComId && m.UserId == member.UserId);
+
+            if (mem == null)
+            {
+                return BadRequest("No member found");
+            }
+
+            // Update fields
+            mem.Role = member.Role;
+            mem.Balance = member.Balance;
+            mem.UnitNum = member.UnitNum;
+            mem.IsLiable = member.IsLiable;
+            mem.IsResident = member.IsResident;
+            mem.IsManager = member.IsManager;
+            mem.IsProvider = member.IsProvider;
+            mem.IsApproved = member.IsApproved;
+
             context.SaveChanges();
             return Ok("Member updated successfully");
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Error updating member: {ex.Message}");
+            return BadRequest($"Error updating member: {ex.Message}");
         }
     }
+
     [HttpDelete("RemoveMember")]
     public IActionResult RemoveMember(int ComId, int UserId)
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a manager of this community
+            var requestingMember = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == ComId && m.IsApproved == true);
+            if (requestingMember == null || !requestingMember.IsManager == true)
+            {
+                return Unauthorized("User is not a manager of this community");
+            }
+
             var member = context.Members
                 .FirstOrDefault(m => m.ComId == ComId && m.UserId == UserId);
 
@@ -521,7 +693,7 @@ public class CommunityAppServerAPIController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Error removing member: {ex.Message}");
+            return BadRequest($"Error removing member: {ex.Message}");
         }
     }
 
@@ -530,6 +702,30 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a member of this community
+            bool isMember = context.Members.Any(m => m.UserId == account.Id && m.ComId == req.ComId && m.IsApproved == true);
+            if (!isMember)
+            {
+                return Unauthorized("User is not an approved member of this community");
+            }
+
             Models.RoomRequest modelReq = req.GetRoomRequest(); // Assuming you have a converter method
             if (modelReq == null)
                 return BadRequest("Invalid data.");
@@ -551,6 +747,30 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a member of this community
+            bool isMember = context.Members.Any(m => m.UserId == account.Id && m.ComId == ComId && m.IsApproved == true);
+            if (!isMember)
+            {
+                return Unauthorized("User is not an approved member of this community");
+            }
+
             List<DTO.RoomRequest> Requests = context.RoomRequests
                 .Where(rr => rr.ComId == ComId && rr.IsApproved == IsApproved)
                 .Select(rr => new DTO.RoomRequest(rr))
@@ -569,6 +789,30 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a member of this community
+            bool isMember = context.Members.Any(m => m.UserId == account.Id && m.ComId == ComId && m.IsApproved == true);
+            if (!isMember)
+            {
+                return Unauthorized("User is not an approved member of this community");
+            }
+
             List<DTO.RoomRequest> Requests = context.RoomRequests
                 .Where(rr => rr.ComId == ComId)
                 .Select(rr => new DTO.RoomRequest(rr))
@@ -587,6 +831,30 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a manager of this community
+            var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == roomRequest.ComId && m.IsApproved == true);
+            if (member == null || !member.IsManager == true)
+            {
+                return Unauthorized("User is not a manager of this community");
+            }
+
             // Find the existing room request
             Models.RoomRequest? existingRequest = context.RoomRequests.FirstOrDefault(rr => rr.RequestId == roomRequest.RequestId);
 
@@ -616,12 +884,36 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
-            // Find the room request
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            // Find the room request first to get ComId for authorization
             Models.RoomRequest? roomRequest = context.RoomRequests.FirstOrDefault(rr => rr.RequestId == id);
 
             if (roomRequest == null)
             {
                 return NotFound("Room request not found");
+            }
+
+            var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == roomRequest.ComId && m.IsApproved == true);
+
+            if (member==null)
+            {
+                return Unauthorized("Not a part of the community");
             }
 
             // Remove the room request
@@ -640,6 +932,29 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a member of this community
+            var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == comId && m.IsApproved == true);
+            if (member == null)
+            {
+                return Unauthorized("User is not a member of this community");
+            }
             DateTime now = DateTime.Now;
 
 
@@ -666,6 +981,30 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a member of this community
+            var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == expense.ComId && m.IsApproved == true);
+            if (member == null)
+            {
+                return Unauthorized("User is not a member of this community");
+            }
+
             context.Expenses.Add(expense.GetExpense());
             int changes = context.SaveChanges();
 
@@ -689,6 +1028,29 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is an approved member of this community
+            bool isMember = context.Members.Any(m => m.UserId == account.Id && m.ComId == ComId && m.IsApproved == true);
+            if (!isMember)
+            {
+                return Unauthorized("User is not an approved member of this community");
+            }
             List<DTO.Expense> exp = context.Expenses
                 .Where(e => e.ComId == ComId)
                 .Select(e => new DTO.Expense(e))
@@ -707,6 +1069,30 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a manager of this community
+            var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == p.ComId && m.IsApproved == true);
+            if (member == null || member.IsManager != true)
+            {
+                return Unauthorized("User is not a manager of this community");
+            }
+
             var approvedMembers = context.Members
                 .Where(m => m.ComId == p.ComId && m.IsApproved == true)
                 .ToList();
@@ -716,12 +1102,12 @@ public class CommunityAppServerAPIController : ControllerBase
 
             var payments = new List<Models.Payment>();
 
-            foreach (var member in approvedMembers)
+            foreach (var memberItem in approvedMembers)
             {
                 var dtoCopy = new DTO.Payment
                 {
                     ComId = p.ComId,
-                    UserId = member.UserId,
+                    UserId = memberItem.UserId,
                     Amount = p.Amount,
                     Details = p.Details,
                     WasPayed = false,
@@ -729,8 +1115,7 @@ public class CommunityAppServerAPIController : ControllerBase
                     PayUntil = p.PayUntil
                 };
                 payments.Add(dtoCopy.GetPayment()); // Convert to Models.Payment
-                RecalculateMemberBalance(member.UserId, member.ComId);
-
+                RecalculateMemberBalance(memberItem.UserId, memberItem.ComId);
             }
 
             context.Payments.AddRange(payments);
@@ -750,13 +1135,36 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
-            // Verify the member exists and is approved in this community
-            var member = context.Members
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a manager of this community
+            var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == p.ComId && m.IsApproved == true);
+            if (member == null || member.IsManager!=true)
+            {
+                return Unauthorized("User is not a manager of this community");
+            }
+
+            // Verify the target member exists and is approved in this community
+            var targetMember = context.Members
                 .FirstOrDefault(m => m.UserId == p.UserId && m.ComId == p.ComId && m.IsApproved == true);
 
-            if (member == null)
+            if (targetMember == null)
                 return NotFound($"No approved member found with User ID {p.UserId} in Community {p.ComId}");
-
 
             context.Payments.Add(p.GetPayment());
             context.SaveChanges();
@@ -775,6 +1183,22 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
             List<DTO.Payment> payments =
                 context.Payments.Where(p => p.ComId == ComId && p.UserId == UserId)
                 .Select(p => new DTO.Payment(p)).ToList();
@@ -804,6 +1228,29 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? CheckAccount = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (CheckAccount == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            //Check if user is a manager of this community
+            var CheckMember = context.Members.FirstOrDefault(m => m.UserId == CheckAccount.Id && m.ComId == ComId && m.IsApproved == true);
+            if (CheckMember == null || CheckMember.IsManager != true)
+            {
+                return Unauthorized("User is not a manager of this community");
+            }
             List<PaymentMemberAccount> paymentsWithMemberAccount = (from payment in context.Payments
                                                                     where payment.ComId == ComId
                                                                     join member in context.Members
@@ -831,23 +1278,49 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
-            Models.Payment pay = context.Payments
-                                 .Where(pay => pay.PaymentId == payId)
-                                 .FirstOrDefault();
-            if (pay != null)
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
             {
-                context.Payments.Remove(pay);
-                context.SaveChanges();
-                RecalculateMemberBalance(pay.UserId, pay.ComId);
-
+                return Unauthorized("User is not logged in");
             }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            Models.Payment? pay = context.Payments
+                                 .Where(p => p.PaymentId == payId)
+                                 .FirstOrDefault();
+
+            if (pay == null)
+            {
+                return NotFound("Payment not found");
+            }
+
+            //Check if user is a manager of this community
+            var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == pay.ComId && m.IsApproved == true);
+            if (member == null || member.IsManager != true)
+            {
+                return Unauthorized("User is not a manager of this community");
+            }
+
+            context.Payments.Remove(pay);
+            context.SaveChanges();
+            RecalculateMemberBalance(pay.UserId, pay.ComId);
+
             return Ok();
         }
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
-
     }
 
     [HttpPut("UpdatePayment")]
@@ -855,10 +1328,37 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
             Models.Payment? existingPayment = context.Payments.FirstOrDefault(p => p.PaymentId == payment.PaymentId);
             if (existingPayment == null)
             {
                 return NotFound("Payment not found");
+            }
+
+            //Check if user is either the payment recipient or a manager of this community
+            var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == existingPayment.ComId && m.IsApproved == true);
+            bool isRecipient = existingPayment.UserId == account.Id;
+            bool isManager = member != null && member.IsManager==true;
+
+            if (!isRecipient && !isManager)
+            {
+                return Unauthorized("User can only update their own payments or must be a manager");
             }
 
             existingPayment.WasPayed = payment.WasPayed;
@@ -878,15 +1378,42 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
-            Models.Notice n = context.Notices
-                                 .Where(n => n.NoticeId == noticeId)
-                                 .FirstOrDefault();
-            if (n != null)
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
             {
-                context.Notices.Remove(n);
-                context.SaveChanges();
-
+                return Unauthorized("User is not logged in");
             }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            Models.Notice? n = context.Notices
+                                 .Where(notice => notice.NoticeId == noticeId)
+                                 .FirstOrDefault();
+
+            if (n == null)
+            {
+                return NotFound("Notice not found");
+            }
+
+            //Check if user is a manager of this community
+            var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == n.ComId && m.IsApproved == true);
+            if (member == null || !member.IsManager == true)
+            {
+                return Unauthorized("User is not a manager of this community");
+            }
+
+            context.Notices.Remove(n);
+            context.SaveChanges();
+
             return Ok();
         }
         catch (Exception ex)
@@ -900,15 +1427,45 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
-            Models.Report r = context.Reports
-                                 .Where(r => r.ReportId == repId)
-                                 .FirstOrDefault();
-            if (r != null)
+            //Check if user is logged in
+            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
+            if (string.IsNullOrEmpty(userEmail))
             {
-                context.Reports.Remove(r);
-                context.SaveChanges();
-
+                return Unauthorized("User is not logged in");
             }
+
+            //Get model user class from DB with matching email
+            Models.Account? account = context.GetAccount(userEmail);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (account == null)
+            {
+                return Unauthorized("User not found in database");
+            }
+
+            Models.Report? r = context.Reports
+                                 .Where(report => report.ReportId == repId)
+                                 .FirstOrDefault();
+
+            if (r == null)
+            {
+                return NotFound("Report not found");
+            }
+
+            //Check if user is either the creator of the report or a manager of this community
+            var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == r.ComId && m.IsApproved == true);
+            bool isCreator = r.UserId == account.Id;
+            bool isManager = member != null && member.IsManager == true;
+
+            if (!isCreator && !isManager)
+            {
+                return Unauthorized("User can only delete their own reports or must be a manager");
+            }
+
+            context.Reports.Remove(r);
+            context.SaveChanges();
+
             return Ok();
         }
         catch (Exception ex)
