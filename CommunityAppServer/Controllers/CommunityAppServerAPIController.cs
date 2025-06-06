@@ -552,16 +552,15 @@ public class CommunityAppServerAPIController : ControllerBase
     {
         try
         {
-            //Check if user is logged in
+            // Check if user is logged in
             string? userEmail = HttpContext.Session.GetString("loggedInAccount");
             if (string.IsNullOrEmpty(userEmail))
             {
                 return Unauthorized("User is not logged in");
             }
 
-            //Get model user class from DB with matching email
+            // Get model user class from DB with matching email
             Models.Account? account = context.GetAccount(userEmail);
-            //Clear the tracking of all objects to avoid double tracking
             context.ChangeTracker.Clear();
 
             if (account == null)
@@ -569,9 +568,10 @@ public class CommunityAppServerAPIController : ControllerBase
                 return Unauthorized("User not found in database");
             }
 
-            //Check if user is a manager of this community
-            var requestingMember = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == member.ComId && m.IsApproved == true);
-            if (requestingMember == null || !requestingMember.IsManager == true)
+            // Check if user is a manager of this community
+            var requestingMember = context.Members.FirstOrDefault(m =>
+                m.UserId == account.Id && m.ComId == member.ComId && m.IsApproved == true);
+            if (requestingMember == null || !requestingMember.IsManager==true)
             {
                 return Unauthorized("User is not a manager of this community");
             }
@@ -595,6 +595,25 @@ public class CommunityAppServerAPIController : ControllerBase
             mem.IsApproved = member.IsApproved;
 
             context.SaveChanges();
+
+            // After saving, check if at least one manager exists
+            bool hasManager = context.Members.Any(m => m.ComId == member.ComId && m.IsManager==true);
+
+            if (!hasManager)
+            {
+                // No managers found, promote the first eligible member (by UserId)
+                var newManager = context.Members
+                    .Where(m => m.ComId == member.ComId && m.IsApproved==true)
+                    .OrderBy(m => m.UserId)
+                    .FirstOrDefault();
+
+                if (newManager != null)
+                {
+                    newManager.IsManager = true;
+                    context.SaveChanges();
+                }
+            }
+
             return Ok("Member updated successfully");
         }
         catch (Exception ex)
@@ -602,6 +621,7 @@ public class CommunityAppServerAPIController : ControllerBase
             return BadRequest($"Error updating member: {ex.Message}");
         }
     }
+
 
     [HttpDelete("RemoveMember")]
     public IActionResult RemoveMember(int ComId, int UserId)
@@ -1042,7 +1062,7 @@ public class CommunityAppServerAPIController : ControllerBase
             }
 
             //Check if user is a manager of this community
-            var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == p.ComId && m.IsApproved == true);
+            var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == p.ComId && m.IsApproved == true && m.IsLiable == true);
             if (member == null || member.IsManager != true)
             {
                 return Unauthorized("User is not a manager of this community");
