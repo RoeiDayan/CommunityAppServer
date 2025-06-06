@@ -127,7 +127,7 @@ CREATE TABLE RoomRequests (
 
 -- Insert Initial Data
 INSERT INTO Account (Email, Name, Password, PhoneNumber) VALUES 
-('a', 'a', 'a', '0528182233'),
+('manager@m.com', 'manager', 'manager1', '0539192233'),
 ('b', 'b', 'b', '0501418822'),
 ('c@example.com', 'Charlie', 'pass123', '0500000003'),
 ('d@example.com', 'Dana', 'pass123', '0500000004'),
