@@ -473,52 +473,7 @@ public class CommunityAppServerAPIController : ControllerBase
     }
 
 
-    [HttpGet("GetApprovedCommunityMemberAccounts")]
-    public IActionResult GetApprovedCommunityMemberAccounts(int ComId)
-    {
-        try
-        {
-            //Check if user is logged in
-            string? userEmail = HttpContext.Session.GetString("loggedInAccount");
-            if (string.IsNullOrEmpty(userEmail))
-            {
-                return Unauthorized("User is not logged in");
-            }
-
-            //Get model user class from DB with matching email
-            Models.Account? account = context.GetAccount(userEmail);
-            //Clear the tracking of all objects to avoid double tracking
-            context.ChangeTracker.Clear();
-
-            if (account == null)
-            {
-                return Unauthorized("User not found in database");
-            }
-
-            
-
-            List<DTO.MemberAccount> comMemberAccounts = context.Members
-                .Where(m => m.ComId == ComId && m.IsApproved == true) // Only approved members
-                .Join(
-                    context.Accounts,
-                    m => m.UserId,
-                    a => a.Id,
-                    (m, a) => new DTO.MemberAccount
-                    {
-                        Member = new DTO.Member(m),
-                        Account = new DTO.Account(a)
-                    }
-                )
-                .ToList();
-
-            return Ok(comMemberAccounts);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
+    
 
 
 
