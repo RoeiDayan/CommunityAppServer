@@ -1453,12 +1453,11 @@ public class CommunityAppServerAPIController : ControllerBase
                 return NotFound("Report not found");
             }
 
-            //Check if user is either the creator of the report or a manager of this community
             var member = context.Members.FirstOrDefault(m => m.UserId == account.Id && m.ComId == r.ComId && m.IsApproved == true);
-            bool isCreator = r.UserId == account.Id;
+            
             bool isManager = member != null && member.IsManager == true;
 
-            if (!isCreator && !isManager)
+            if (!isManager)
             {
                 return Unauthorized("User can only delete their own reports or must be a manager");
             }
