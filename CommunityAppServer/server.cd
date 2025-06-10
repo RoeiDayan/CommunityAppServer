@@ -1,60 +1,90 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
-  <Class Name="CommunityAppServer.Models.Account" Collapsed="true">
-    <Position X="7.75" Y="1.75" Width="1.5" />
+  <Class Name="CommunityAppServer.Models.Account">
+    <Position X="1.5" Y="0.5" Width="2.75" />
     <TypeIdentifier>
       <HashCode>IAACAAAAACBAAAAAAKgAQAQAAAAAAAACAAAEAAAAAAA=</HashCode>
       <FileName>Models\Account.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CommunityAppServer.Models.Community" Collapsed="true">
-    <Position X="9.5" Y="1.75" Width="1.5" />
+  <Class Name="CommunityAppServer.Models.Community">
+    <Position X="8" Y="0.5" Width="4.75" />
     <TypeIdentifier>
       <HashCode>IBAAAAAAAhDAAAAAACgAQAAAAAAACAAAAQAEAAAAAAA=</HashCode>
       <FileName>Models\Community.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Members" />
+      <Property Name="Reports" />
+      <Property Name="RoomRequests" />
+      <Property Name="Payments" />
+      <Property Name="Notices" />
+      <Property Name="Expenses" />
+    </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="CommunityAppServer.Models.Expense" Collapsed="true">
-    <Position X="11.25" Y="1.75" Width="1.5" />
+  <Class Name="CommunityAppServer.Models.Expense">
+    <Position X="14.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAABAAAAgAEAAACAAAACAAAEACAAAAAAAQAAAAAA=</HashCode>
       <FileName>Models\Expense.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Com" />
+    </ShowAsAssociation>
   </Class>
-  <Class Name="CommunityAppServer.Models.Member" Collapsed="true">
-    <Position X="7.75" Y="2.75" Width="1.5" />
+  <Class Name="CommunityAppServer.Models.Member">
+    <Position X="5.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>iAABAAAAAAAgAAAAEAgAAAgAAAEACABCAAQAAAAAAAA=</HashCode>
       <FileName>Models\Member.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="User" />
+      <Property Name="Com" />
+    </ShowAsAssociation>
   </Class>
-  <Class Name="CommunityAppServer.Models.Notice" Collapsed="true">
-    <Position X="9.5" Y="2.75" Width="1.5" />
+  <Class Name="CommunityAppServer.Models.Notice">
+    <Position X="16.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAAAEAAACAAAAgAIAEiGAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Notice.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Com" />
+    </ShowAsAssociation>
   </Class>
-  <Class Name="CommunityAppServer.Models.Payment" Collapsed="true">
-    <Position X="11.25" Y="2.75" Width="1.5" />
+  <Class Name="CommunityAppServer.Models.Payment">
+    <Position X="12.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAABAAAAAAAAAAiAAAEAGBAAAAAAAAAAAAI=</HashCode>
       <FileName>Models\Payment.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Com" />
+      <Property Name="User" />
+    </ShowAsAssociation>
   </Class>
-  <Class Name="CommunityAppServer.Models.Report" Collapsed="true">
-    <Position X="7.75" Y="3.75" Width="1.5" />
+  <Class Name="CommunityAppServer.Models.Report">
+    <Position X="8" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAAQEAAACAAAAgAAAEACAAAAAAAAAIAAAA=</HashCode>
       <FileName>Models\Report.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Com" />
+      <Property Name="User" />
+    </ShowAsAssociation>
   </Class>
-  <Class Name="CommunityAppServer.Models.RoomRequest" Collapsed="true">
-    <Position X="9.5" Y="3.75" Width="1.5" />
+  <Class Name="CommunityAppServer.Models.RoomRequest">
+    <Position X="17.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAAAAQAACAAAAgAIAEgCAACAAAACAAAAAA=</HashCode>
       <FileName>Models\RoomRequest.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Com" />
+      <Property Name="User" />
+    </ShowAsAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
